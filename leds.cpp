@@ -21,7 +21,7 @@ void clearAllLeds()
 
 void setAllLeds()
 {
-// see requirements for this function from leds.h
+// see requirements for this function from leds.h test commit
 }
 
 
