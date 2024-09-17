@@ -1,1 +1,2 @@
 # TVT24KMO_R15_SpedenSpelit
+OAMK Tietotekniikan sovellusprojektin koodirepositrio 
