@@ -46,7 +46,12 @@ void initializeDisplay(void)
   pinMode(outEnable, OUTPUT);
   pinMode(serialInput, OUTPUT);
 
+  // reset the chip
+  digitalWrite(masterReset, LOW); // turn on the reset
+  delay(1); // wait 1ms
   digitalWrite(masterReset, HIGH); // turn off the reset 
+
+  // set the chip to output mode
   digitalWrite(outEnable, LOW); // enable the output (active LOW)
 
   Serial.println("DISPLAY: Initialized"); // debug message
@@ -89,11 +94,16 @@ void testDisplay(void){
 */
 void writeByte(uint8_t bits, bool last)
 {
-  byte segment = displayNumbers[bits]; // set the segment to be displayed
+  bits = displayNumbers[bits]; // get the 7-segment display code for the number
 
-  // function variables: (datapin, clockpin, bitorder (MSBFIRST or LSBFIRST), data)
-  shiftOut(serialInput, shiftClock, MSBFIRST, segment); // shift out the segment to the display
-  
+  // Send the bits to the shift register one by one (not using shiftOut function as library is not allowed)
+  for (int i = 7; i >= 0; i--) { // loop from 7 to 0 (8 bits) 
+    digitalWrite(shiftClock, LOW); // Set the shift clock low to prepare for sending a bit to the shift register
+    digitalWrite(serialInput, (bits >> i) & 1); // Send the most significant bit first, shift the bits to the right by i and then bitwise AND with 1 to get the bit at position i  
+    digitalWrite(shiftClock, HIGH); // Set the shift clock high to send the bit to the shift register
+  }
+
+
   if (last) // if on last byte (this will come from the writeHighAndLowNumber function)
   {
     digitalWrite(latchClock, HIGH); // latch the data
@@ -138,6 +148,8 @@ void writeHighAndLowNumber(uint8_t tens, uint8_t ones)
 */
 void showResult(byte number)
 {
+  Serial.print("DISPLAY: Displaying number: "); // debug message
+  Serial.println(number); // debug message
   uint8_t tens = number / 10; // get tens by dividing number by 10 (ex. 23 / 10 = 2)
   uint8_t ones = number % 10; // get ones by getting the remainder of number divided by 10 (ex. 23 % 10 = 3), makes 23 with above line of code
 
