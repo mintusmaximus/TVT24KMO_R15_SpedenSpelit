@@ -2,11 +2,27 @@
 
 
 // pin setup for SN54HC595 8-bit serial-in, parallel-out shift register 
-int serialInput = 8; // DS serial data input
-int outEnable = 9; // OE' output enable (active low)
-int latchClock = 10; // STCP storage register clock
-int shiftClock = 11; // SHCP shift register clock
-int masterReset = 12; // MR' master reset (active HIGH)
+const int serialInput = 8; // DS serial data input
+const int outEnable = 9; // OE' output enable (active LOW)
+const int latchClock = 10; // STCP storage register clock
+const int shiftClock = 11; // SHCP shift register clock
+const int masterReset = 12; // MR' master reset (active HIGH)
+
+
+
+// 7-segment display codes, array index == number to be displayed
+const byte displayNumbers[] = { 
+  0b00111111, // 0
+  0b00000110, // 1
+  0b01011011, // 2
+  0b01001111, // 3
+  0b01100110, // 4
+  0b01101101, // 5
+  0b01111101, // 6
+  0b00000111, // 7
+  0b01111111, // 8
+  0b01101111  // 9
+};
 
 
 
@@ -30,14 +46,15 @@ void initializeDisplay(void)
   pinMode(outEnable, OUTPUT);
   pinMode(serialInput, OUTPUT);
 
-  digitalWrite(masterReset, HIGH); // reset the chip
-  digitalWrite(outEnable, LOW); // enable the output
-  Serial.writeln("DISPLAY: Initialized"); // debug message
+  digitalWrite(masterReset, HIGH); // turn off the reset
+  digitalWrite(outEnable, LOW); // enable the output (active LOW)
+
+  Serial.println("DISPLAY: Initialized"); // debug message
 }
 
-/* 
-testDisplay will show numbers from 0 to 99 to 7-segment display for testing purposes
-*/
+
+
+// testDisplay will show numbers from 0 to 99 to 7-segment display for testing purposes
 void testDisplay(void){
   Serial.println("DISPLAY: Displaying 0-99"); // debug message
 
@@ -70,30 +87,22 @@ void testDisplay(void){
   multiple times to write all cascaded numbers to 7-segment
   displays.
 */
-void writeByte(uint8_t bits,bool last)
+
+
+void writeByte(uint8_t bits, bool last)
 {
-  // shift out 8 bits of data
-  for(int i = 0; i < 8; i++)
-  {
-    // set the bit to be shifted out
-    digitalWrite(serialInput, bits & 0x80);
-    // shift the data
-    digitalWrite(shiftClock, HIGH);
-    digitalWrite(shiftClock, LOW);
-    // shift the next bit
-    bits <<= 1;
-  }
-  // latch the data
-  digitalWrite(latchClock, HIGH);
-  digitalWrite(latchClock, LOW);
+  byte segment = displayNumbers[bits]; // set the segment to be displayed
+
+  shiftOut(serialInput, shiftClock, MSBFIRST, segment); // shift out the segment to the display 
 
 
-  // if this is the last byte, display the data
-  if(last)
+  if (last) // if on last byte
   {
-    // enable the output
-    digitalWrite(outEnable, LOW);
+    digitalWrite(latchClock, HIGH); // latch the data
+    digitalWrite(latchClock, LOW); // unlatch the data
   }
+
+
 }
 
 
@@ -109,12 +118,13 @@ void writeByte(uint8_t bits,bool last)
   uint8_t tens: number 0,1,..,9
   uint8_t ones: number 0,1,..,9
 */
-void writeHighAndLowNumber(uint8_t tens,uint8_t ones)
+void writeHighAndLowNumber(uint8_t tens, uint8_t ones)
 {
   // write tens to the first display
-  writeByte(tens,false);
+  writeByte(tens,false); // call the writeByte function with tens and false
+
   // write ones to the second display
-  writeByte(ones,true);
+  writeByte(ones,true); // call the writeByte function with ones and true
 }
 
 
@@ -132,8 +142,9 @@ void writeHighAndLowNumber(uint8_t tens,uint8_t ones)
 */
 void showResult(byte number)
 {
-  uint8_t tens = number / 10;
-  uint8_t ones = number % 10;
-  writeHighAndLowNumber(tens,ones);
+  uint8_t tens = number / 10; // get tens by dividing number by 10 (ex. 23 / 10 = 2)
+  uint8_t ones = number % 10; // get ones by getting the remainder of number divided by 10 (ex. 23 % 10 = 3), makes 23 with above line of code
+
+  writeHighAndLowNumber(tens,ones); // call writeHighAndLowNumber with tens and ones to display the number on the 7-segment display
 }
 
