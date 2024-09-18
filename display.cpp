@@ -46,7 +46,7 @@ void initializeDisplay(void)
   pinMode(outEnable, OUTPUT);
   pinMode(serialInput, OUTPUT);
 
-  digitalWrite(masterReset, HIGH); // turn off the reset
+  digitalWrite(masterReset, HIGH); // turn off the reset 
   digitalWrite(outEnable, LOW); // enable the output (active LOW)
 
   Serial.println("DISPLAY: Initialized"); // debug message
@@ -58,10 +58,10 @@ void initializeDisplay(void)
 void testDisplay(void){
   Serial.println("DISPLAY: Displaying 0-99"); // debug message
 
-  for(int i = 0; i < 100; i++)
+  for(int i = 0; i < 100; i++) // loop from 0 to 99
   {
-    showResult(i);
-    delay(100);
+    showResult(i); // call the showResult function with loop index
+    delay(100); // wait 100ms
   }
 
   Serial.println("DISPLAY: Test complete"); // debug message
@@ -87,22 +87,18 @@ void testDisplay(void){
   multiple times to write all cascaded numbers to 7-segment
   displays.
 */
-
-
 void writeByte(uint8_t bits, bool last)
 {
   byte segment = displayNumbers[bits]; // set the segment to be displayed
 
-  shiftOut(serialInput, shiftClock, MSBFIRST, segment); // shift out the segment to the display 
-
-
-  if (last) // if on last byte
+  // function variables: (datapin, clockpin, bitorder (MSBFIRST or LSBFIRST), data)
+  shiftOut(serialInput, shiftClock, MSBFIRST, segment); // shift out the segment to the display
+  
+  if (last) // if on last byte (this will come from the writeHighAndLowNumber function)
   {
     digitalWrite(latchClock, HIGH); // latch the data
     digitalWrite(latchClock, LOW); // unlatch the data
   }
-
-
 }
 
 

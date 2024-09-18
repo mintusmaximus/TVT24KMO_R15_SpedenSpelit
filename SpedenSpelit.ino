@@ -14,6 +14,9 @@ void setup()
   Serial.begin(9600);
   initializeDisplay();
   testDisplay(); // display numbers from 0 to 99
+  showResult(0); // after test, show 0
+
+
   /*
     Initialize here all modules
   */
