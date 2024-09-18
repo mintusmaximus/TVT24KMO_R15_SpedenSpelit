@@ -11,6 +11,9 @@ volatile bool newTimerInterrupt = false;  // for timer interrupt handler
 
 void setup()
 {
+  Serial.begin(9600);
+  initializeDisplay();
+  testDisplay(); // display numbers from 0 to 99
   /*
     Initialize here all modules
   */

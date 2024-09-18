@@ -38,6 +38,20 @@ void initializeDisplay(void)
     digitalWrite(pinMR, HIGH);
 }
 
+/* 
+testDisplay will show numbers from 0 to 99 to 7-segment display for testing purposes
+*/
+void testDisplay(void){
+  for(int i = 0; i < 100; i++){
+    showResult(i);
+    delay(100);
+  }
+}
+
+
+
+
+
 
 /*
   WriteByte subroutine writes number 0,1,...,9 to
