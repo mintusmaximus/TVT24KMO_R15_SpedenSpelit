@@ -2,11 +2,13 @@
 
 
 // pin setup for SN54HC595 8-bit serial-in, parallel-out shift register 
-int pinMR = 12;
-int pinSRCLK = 11;
-int pinRCLK = 10;
-int pinOE = 9;
-int pinSER = 8; 
+int serialInput = 8; // DS serial data input
+int outEnable = 9; // OE' output enable (active low)
+int latchClock = 10; // STCP storage register clock
+int shiftClock = 11; // SHCP shift register clock
+int masterReset = 12; // MR' master reset (active HIGH)
+
+
 
 
 
@@ -21,31 +23,31 @@ int pinSER = 8;
 */
 void initializeDisplay(void)
 {
-    // set pin modes for the chip pins
-    pinMode(pinMR, OUTPUT);
-    pinMode(pinSRCLK, OUTPUT);
-    pinMode(pinRCLK, OUTPUT);
-    pinMode(pinOE, OUTPUT);
-    pinMode(pinSER, OUTPUT);
+  // set pin modes for the chip pins
+  pinMode(masterReset, OUTPUT);
+  pinMode(shiftClock, OUTPUT);
+  pinMode(latchClock, OUTPUT);
+  pinMode(outEnable, OUTPUT);
+  pinMode(serialInput, OUTPUT);
 
-    // set initial states for the chip pins
-    digitalWrite(pinOE, LOW);
-    digitalWrite(pinMR, HIGH);
-    digitalWrite(pinSRCLK, LOW);
-    digitalWrite(pinRCLK, LOW);
-    digitalWrite(pinSER, LOW);
-    digitalWrite(pinMR, LOW);
-    digitalWrite(pinMR, HIGH);
+  digitalWrite(masterReset, HIGH); // reset the chip
+  digitalWrite(outEnable, LOW); // enable the output
+  Serial.writeln("DISPLAY: Initialized"); // debug message
 }
 
 /* 
 testDisplay will show numbers from 0 to 99 to 7-segment display for testing purposes
 */
 void testDisplay(void){
-  for(int i = 0; i < 100; i++){
+  Serial.println("DISPLAY: Displaying 0-99"); // debug message
+
+  for(int i = 0; i < 100; i++)
+  {
     showResult(i);
     delay(100);
   }
+
+  Serial.println("DISPLAY: Test complete"); // debug message
 }
 
 
@@ -70,7 +72,28 @@ void testDisplay(void){
 */
 void writeByte(uint8_t bits,bool last)
 {
+  // shift out 8 bits of data
+  for(int i = 0; i < 8; i++)
+  {
+    // set the bit to be shifted out
+    digitalWrite(serialInput, bits & 0x80);
+    // shift the data
+    digitalWrite(shiftClock, HIGH);
+    digitalWrite(shiftClock, LOW);
+    // shift the next bit
+    bits <<= 1;
+  }
+  // latch the data
+  digitalWrite(latchClock, HIGH);
+  digitalWrite(latchClock, LOW);
 
+
+  // if this is the last byte, display the data
+  if(last)
+  {
+    // enable the output
+    digitalWrite(outEnable, LOW);
+  }
 }
 
 
@@ -88,7 +111,10 @@ void writeByte(uint8_t bits,bool last)
 */
 void writeHighAndLowNumber(uint8_t tens,uint8_t ones)
 {
-
+  // write tens to the first display
+  writeByte(tens,false);
+  // write ones to the second display
+  writeByte(ones,true);
 }
 
 
@@ -106,6 +132,8 @@ void writeHighAndLowNumber(uint8_t tens,uint8_t ones)
 */
 void showResult(byte number)
 {
-
+  uint8_t tens = number / 10;
+  uint8_t ones = number % 10;
+  writeHighAndLowNumber(tens,ones);
 }
 
