@@ -10,8 +10,9 @@
   
 */
 void initializeTimer(void);
-// Intoduce TIMER1_COMPA_vect Interrupt SeRvice (ISR) function for timer.
-ISR(TIMER1_COMPA_vect);
+
+
+ISR(TIMER1_COMPA_vect); // Intoduce TIMER1_COMPA_vect Interrupt SeRvice (ISR) function for timer.
 
 /*
   initializeGame() subroutine is used to initialize all variables
@@ -34,14 +35,15 @@ void initializeGame(void);
   
 */
 void checkGame(byte);
-
-
 /*
   startTheGame() subroutine calls InitializeGame()
   function and enables Timer1 interrupts to start
   the Game.
 */
 void startTheGame(void);
+
+
+void stopTheGame(void);
 
 
 #endif
