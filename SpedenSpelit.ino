@@ -19,6 +19,10 @@ void setup() {
   /*
     Initialize here all modules
   */
+   // . Arvotut numerot talletetaan 100 alkion mittaiseen taulukkoon (randomNumbers)
+  int randomNumbers[100]; 
+ // Kun käyttäjä painaa kytkimiä 0,1,2,3 nämä näppäinten painallukset talletetaan.
+  int userNumbers[100];
 }
 
 void loop() {
