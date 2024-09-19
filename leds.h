@@ -9,6 +9,10 @@
 */
 void initializeLeds();
 
+pinMode(A2, OUTPUT)
+pinMode(A3, OUTPUT)
+pinMode(A4, OUTPUT)
+pinMode(A5, OUTPUT)
 /*
   setLed(byte) sets correct led number given as 0,1,2 or 3
   led number 0 corresponds to led connected at Arduino pin A2
@@ -25,6 +29,7 @@ void setLed(byte ledNumber);
   clearAllLeds(void) subroutine clears all leds
 */
 void clearAllLeds(void);
+
 
 /*
   setAllLeds subroutine sets all leds
