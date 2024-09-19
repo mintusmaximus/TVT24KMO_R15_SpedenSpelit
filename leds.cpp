@@ -13,8 +13,13 @@ for (byte i = 0; i < 4; i++){
 
 void setLed(byte ledNumber)
 {
-// see requirements for this function from leds.h
+if (ledNumber < 4) {
+    for (byte i = 0; i < 4; i++){
+        digitalWrite(ledPins[i], LOW);
+    }
+}
 
+digitalWrite (ledPins[ledNumber], HIGH);
 }
 
 
