@@ -35,6 +35,8 @@ void loop() {
   if(newTimerInterrupt == true) {
      // new random number must be generated
      // and corresponding led must be activated
+    
+    // ledmuuttuja = random(1,5); 
   }
 }
 
@@ -51,7 +53,9 @@ ISR(TIMER1_COMPA_vect) {
 
 
 void checkGame(byte nbrOfButtonPush) {
-	// käyttäjän inputin tarkistamiseen. See requirements for the function from SpedenSpelit.h
+	// käyttäjän inputin tarkistamiseen.  
+  /* CheckGame aliohjelma vertaa randomNumbers ja userNumbers taulukoita aina siihen 
+  taulukon indeksiin asti, kuinka monta kertaa käyttäjä on näppäimiä pelin alusta asti painanut.*/
 }
 
 
@@ -60,9 +64,10 @@ void initializeGame() {
 }
 
 void startTheGame() {
-   // pelin käynnistämiseen. See requirements for the function from SpedenSpelit.h
+   // pelin käynnistämiseen. See requirements for the function from SpedenSpelit.h 
+   // startTheGame enabloi Timer1 keskeytykset
 }
 
 void stopTheGame() {
-  //
+  // StopTheGame funktio disabloi Timer1 keskeytykset 
 }
