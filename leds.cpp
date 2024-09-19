@@ -3,7 +3,12 @@
 // testi yritys
 void initializeLeds()
 {
-// see requirements for this function from leds.h
+const byte ledPins[] = {A2, A3, A4, A5};
+
+for (byte i = 0; i < 4; i++){
+    pinMode(ledPins[i], OUTPUT);
+    digitalWrite(ledPins[i], LOW);
+}
 }
 
 void setLed(byte ledNumber)
