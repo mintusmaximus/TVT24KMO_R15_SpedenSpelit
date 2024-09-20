@@ -1,8 +1,5 @@
 #include "buttons.h"
 
-unsigned long merkattuaika = 0;
-unsigned long kynnysaika = 120; //kysy eka ja sit poista omatekemä
-
 void initButtonsAndButtonInterrupts(void)
 {
   PCICR |= 0b00000100; //enabloi portti D auki (PCINT16-23), "or" bitwisellä kun haluan testata
@@ -24,7 +21,7 @@ void initButtonsAndButtonInterrupts(void)
 
 ISR(PCINT2_vect) //funktio pineille D0-D7
  {
-   unsigned long aika = millis(); // oletan että muuttujan ajan kuuluisi olla aika, tämä puuttui
+   unsigned long = millis();
 
 
   if (digitalRead(2) == LOW && aika > merkattuaika + kynnysaika)

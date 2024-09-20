@@ -1,7 +1,7 @@
 #include "display.h"
 
 
-// pin setup for SN74HC595 8-bit serial-in, parallel-out shift register 
+// pin setup for SN54HC595 8-bit serial-in, parallel-out shift register 
 const int serialInput = 8; // DS serial data input
 const int outEnable = 9; // OE' output enable (active LOW)
 const int latchClock = 10; // STCP storage register clock
