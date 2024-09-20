@@ -1,6 +1,7 @@
 #include "display.h"
 #include "buttons.h"
 #include "leds.h"
+#include "sound.h"
 #include "SpedenSpelit.h"
 
 // Use these 2 volatile variables for communicating between
