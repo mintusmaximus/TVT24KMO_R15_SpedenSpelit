@@ -1,14 +1,14 @@
 #include "leds.h"
 
-const byte ledPins[] = {A2, A3, A4, A5};
-const int ledCount = 4;
+const byte ledPins[] = {A2, A3, A4, A5}; //Analogi pinnien alustukseen
+const int ledCount = 4; // käytössä 4 lediä
 // testi yritys
 void initializeLeds()
 {
 
 for (byte i = 0; i < 4; i++){
-    pinMode(ledPins[i], OUTPUT);
-    digitalWrite(ledPins[i], LOW);
+    pinMode(ledPins[i], OUTPUT); //Analogi pinnien alustus
+    digitalWrite(ledPins[i], LOW); //Ledit pois päältä
 }
 }
 
