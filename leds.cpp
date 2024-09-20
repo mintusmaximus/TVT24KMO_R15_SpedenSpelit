@@ -1,9 +1,10 @@
 #include "leds.h"
 
+const byte ledPins[] = {A2, A3, A4, A5};
+const int ledCount = 4;
 // testi yritys
 void initializeLeds()
 {
-const byte ledPins[] = {A2, A3, A4, A5};
 
 for (byte i = 0; i < 4; i++){
     pinMode(ledPins[i], OUTPUT);
@@ -25,13 +26,18 @@ digitalWrite (ledPins[ledNumber], HIGH);
 
 void clearAllLeds()
 {
-// see requirements for this function from leds.h
+for(int i = 0; i < ledCount; i++){
+  digitalWrite(ledPins[i], LOW);
+}
  
 }
 
 void setAllLeds()
 {
-// see requirements for this function from leds.h test commit
+for(int i = 0; i < ledCount; i++){
+  digitalWrite(ledPins[i], HIGH);
+}
+ 
 }
 
 
