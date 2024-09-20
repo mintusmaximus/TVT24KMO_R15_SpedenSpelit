@@ -43,7 +43,18 @@ for(int i = 0; i < ledCount; i++){
 
 void show1()
 {
-// see requirements for this function from leds.h
+ for (int number = 0; number <= 15; number++){
+    for(int i = 0; i < ledCount; i++){
+      if (number & (1 << i)){
+        digitalWrite(ledPins[i], HIGH);
+
+      }
+      else{
+        digitalWrite(ledPins[i], LOW);
+      }
+    }
+    delay(500);
+}
 }
 
 void show2(int rounds)
