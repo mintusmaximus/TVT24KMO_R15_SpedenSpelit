@@ -1,9 +1,10 @@
 #include "leds.h"
 
+const byte ledPins[] = {A2, A3, A4, A5}; // globaali muuttuja ledipinneille
+
 // testi yritys
 void initializeLeds()
 {
-const byte ledPins[] = {A2, A3, A4, A5};
 
 for (byte i = 0; i < 4; i++){
     pinMode(ledPins[i], OUTPUT);

@@ -4,9 +4,11 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-
+/*
 unsigned long merkattuaika = 0;
 unsigned long kynnysaika = 120; //kysy eka ja sit poista omatekemä
+*/
+
 
 const byte firstPin = 2; // First PinChangeInterrupt on D-bus
 const byte lastPin =  5; // Last PinChangeInterrupt on D-bus
