@@ -5,8 +5,8 @@
 #include <avr/interrupt.h>
 
 
-unsigned long merkattuaika = 0;
-unsigned long kynnysaika = 120; //kysy eka ja sit poista omatekemä
+unsigned long merkattuaika; // asettaa ajan, jolloin painallus on tapahtunut
+const unsigned long kynnysaika; // aikaraja painalluksille
 
 const byte firstPin = 2; // First PinChangeInterrupt on D-bus
 const byte lastPin =  5; // Last PinChangeInterrupt on D-bus

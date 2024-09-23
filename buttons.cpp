@@ -1,7 +1,10 @@
 #include "buttons.h"
+unsigned long merkattuaika = 0;
 
 void initButtonsAndButtonInterrupts(void)
 {
+  
+  
   PCICR |= 0b00000100; //enabloi portti D auki (PCINT16-23), "or" bitwisellä kun haluan testata
   PCMSK2 |= 0b01111100; //pinnit PCINT18-22 enabloitu interruptille
   pinMode(2, INPUT_PULLUP); //pinmodet säätää digitalpinnille XXX
@@ -19,39 +22,43 @@ void initButtonsAndButtonInterrupts(void)
   // See requirements for this function from buttons.h
 }
 
-ISR(PCINT2_vect) //funktio pineille D0-D7
+ISR(PCINT2_vect) //funktio pineille D0-D7, jossa on aikaraja painalluksille
  {
-   unsigned long = millis();
-
-
-  if (digitalRead(2) == LOW && aika > merkattuaika + kynnysaika)
-  {   
-   Serial.println("2");  //poista
-   merkattuaika = aika;  
-  }
-  if (digitalRead(3) == LOW && aika > merkattuaika + kynnysaika)
-  {
-   merkattuaika = aika;
-   Serial.println("3");  //poista 
-  }
-  if (digitalRead(4) == LOW && aika > merkattuaika + kynnysaika)
-  {
-   merkattuaika = aika;
-   Serial.println("4");  //poista      
-  } 
-  if (digitalRead(5) == LOW && aika > merkattuaika + kynnysaika)
-  {   
-   merkattuaika = aika;
-   Serial.println("5");  //poista      
-  }
-  if (digitalRead(6) == LOW && aika > merkattuaika + kynnysaika)
-  {  
-   merkattuaika = aika;
-   Serial.println("6");  //poista   
-  }
-  /*
+    /*
      Here you implement logic for handling
 	 interrupts from 2,3,4,5 pins for Game push buttons
 	 and for pin 6 for start Game push button.
    */
+  const unsigned long kynnysaika = 120;
+  unsigned long aika = millis();
+
+  if (aika > merkattuaika + kynnysaika)
+  {
+    if (digitalRead(2) == LOW)
+    {
+      Serial.println("2");      //Serialprint kaikki pois ku valmis
+      buttonNumber = 2;      // SELVITÄ KUULUUKO NÄÄ TÄNNE. INOSTA KOPIOITU    
+    }
+    if (digitalRead(3) == LOW)
+    {
+      Serial.println("3");
+      buttonNumber = 3;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
+    }
+    if (digitalRead(4) == LOW)
+    {
+      Serial.println("4");
+      buttonNumber = 4;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
+    }
+    if (digitalRead(5) == LOW)
+    {
+      Serial.println("5");
+      buttonNumber = 5;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
+    }
+    if (digitalRead(6) == LOW)
+    {
+      Serial.println("6");
+      buttonNumber = 6;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
+    }
+    merkattuaika = aika;
+  }
 }
