@@ -18,13 +18,6 @@ void setup() {
   /*
     Initialize here all modules
   */
-
-  // Arvotut numerot talletetaan 100 alkion mittaiseen taulukkoon (randomNumbers)
-  int randomNumbers[100]; 
-  // Kun käyttäjä painaa kytkimiä 0,1,2,3 nämä näppäinten painallukset talletetaan.
-  int userNumbers[100];
-  // Indeksi, joka seuraa missä kohtaa taulukkoa mennään
-  byte nbrOfButtonPush = 0; //byte-tyyppi, koska arvo ei ylitä 255 ja käyttää vähemmän muistia
 }
 
 void loop() {
@@ -46,7 +39,7 @@ void loop() {
     // Printing the output
     Serial.println(myRand);
      // and corresponding led must be activated
-     ledmuuttuja = myRand; // ledmuuttuja = random(1,5); oli tässä aluksi, mutta se arpoisi vain 
+     ledmuuttuja = myRand; // ledmuuttuja = random(1,5); oli tässä aluksi
   }
 }
 
@@ -94,7 +87,13 @@ void initializeGame() {
   initializeGame() subroutine is used to initialize all variables
   needed to store random numbers and player button push data.
   This function is called from startTheGame() function.
-*/
+  */
+  // Arvotut numerot talletetaan 100 alkion mittaiseen taulukkoon (randomNumbers)
+  int randomNumbers[100]; 
+  // Kun käyttäjä painaa kytkimiä 0,1,2,3 nämä näppäinten painallukset talletetaan taulukkoon (userNumbers)
+  int userNumbers[100];
+  // Indeksi, joka seuraa missä kohtaa taulukkoa mennään eli monestikko käyttäjä on painanut nappeja
+  byte nbrOfButtonPush = 0; //byte-tyyppi, koska arvo ei ylitä 255 ja käyttää vähemmän muistia. oli käytetty muualla koodissa myös.
 }
 
 void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota ja enabloi Timer1 keskeytykset käynnistääkseen pelin
