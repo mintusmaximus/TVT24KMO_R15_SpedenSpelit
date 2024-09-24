@@ -41,6 +41,6 @@ void startTheGame(void);
 
 
 void stopTheGame(void);
-
+ Serial.println("Incorrect input! Game Over.");
 
 #endif
