@@ -59,25 +59,5 @@ void show1()
 
 void show2(int rounds)
 {
-int maxNopeus = 100;
- int minNopeus = 800;
- int nopeudenMuutos = 50;
-
- int nopeus = minNopeus;
-
- for(int k = -1; k < rounds; k++){
-  for(int i = -1; i < 4; i++){
-    for (int j = 0; j <= i; j++) {
-        digitalWrite(ledPins[j], HIGH);
-    }
-    delay(nopeus);
-
-    for (int j = -1; j <= i; j++) {
-        digitalWrite(ledPins[j], LOW);
-  }
-  if(nopeus > maxNopeus){
-    nopeus -= nopeudenMuutos;
-  }
- }
-}
+// see requirements for this function from leds.h  
 }

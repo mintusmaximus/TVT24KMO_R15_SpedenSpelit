@@ -7,19 +7,8 @@
 /*
   initializeTimer() subroutine intializes Arduino Timer1 module to
   give interrupts at rate 1Hz
-  
 */
-
 void initializeTimer(void);
-cli();
-//set timer1 interrupt at 1Hz
-  TCCR1A = 0;// set entire TCCR1A register to 0
-  TCCR1B = 0;// same for TCCR1B
-  TCNT1  = 0;//initialize counter value to 0
-  // set compare match register for 1hz increments
-  OCR1A = 15624;// = (16*10^6) / (1*1024) - 1 (must be <65536)
-sei();
-ISR(TIMER1_COMPA_vect); // Intoduce TIMER1_COMPA_vect Interrupt SeRvice (ISR) function for timer.
 
 /*
   initializeGame() subroutine is used to initialize all variables
@@ -42,6 +31,7 @@ void initializeGame(void);
   
 */
 void checkGame(byte);
+
 /*
   startTheGame() subroutine calls InitializeGame()
   function and enables Timer1 interrupts to start
