@@ -8,12 +8,13 @@
 // loop() function and interrupt handlers
 volatile int buttonNumber = -1;           // for buttons interrupt handler
 volatile bool newTimerInterrupt = false;  // for timer interrupt handler
+int score = 0;
 
 void setup() {
   Serial.begin(9600);
   initializeDisplay();
-  testDisplay(); // display numbers from 0 to 99
-  showResult(0); // after test, show 0
+  // testDisplay(); // display numbers from 0 to 99
+  showResult(score); // after test, show score (default 0)
 
   /*
     Initialize here all modules
@@ -96,11 +97,14 @@ int compareArrays(int randomNumbers[], int userNumbers[], int nbrOfButtonPush)
         }
     }
     // If all elements match, return 0 (indicating success).
-    incrementDisplay(); //increment gamedisplay by 1 , function doesnt exist yet.
+    incrementDisplay(); //increment gamedisplay by 1.
     return 0;
 }
 
-
+void incrementDisplay() {
+  score++; // Increment the score
+  showResult(score); // Update the display with the new score
+}
 
 void initializeGame() {
 	/*
