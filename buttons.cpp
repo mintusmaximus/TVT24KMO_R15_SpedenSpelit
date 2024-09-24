@@ -30,27 +30,27 @@ ISR(PCINT2_vect) //funktio pineille D0-D7, jossa on aikaraja painalluksille
   {
     if (digitalRead(2) == LOW)
     {
-      Serial.println("2");      //Serialprint kaikki pois ku valmis
+      //Serial.println("2");      
       buttonNumber = 2;      // SELVITÄ KUULUUKO NÄÄ TÄNNE. INOSTA KOPIOITU    
     }
     if (digitalRead(3) == LOW)
     {
-      Serial.println("3");
+      //Serial.println("3");
       buttonNumber = 3;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
     }
     if (digitalRead(4) == LOW)
     {
-      Serial.println("4");
+      //Serial.println("4");
       buttonNumber = 4;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
     }
     if (digitalRead(5) == LOW)
     {
-      Serial.println("5");
+     // Serial.println("5");
       buttonNumber = 5;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
     }
     if (digitalRead(6) == LOW) // kutonen käynnistää pelin, tärkeä myöh ehkä
     {
-      Serial.println("6");
+      //Serial.println("6");
       buttonNumber = 6;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
     }
     merkattuaika = aika;
