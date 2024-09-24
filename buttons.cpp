@@ -1,5 +1,5 @@
 #include "buttons.h"
-unsigned long merkattuaika = 0;
+unsigned long merkattuaika = 0; //aikakytkin, myöhemmin esillä
 
 void initButtonsAndButtonInterrupts(void)
 {
@@ -7,7 +7,7 @@ void initButtonsAndButtonInterrupts(void)
   
   PCICR |= 0b00000100; //enabloi portti D auki (PCINT16-23), "or" bitwisellä kun haluan testata
   PCMSK2 |= 0b01111100; //pinnit PCINT18-22 enabloitu interruptille
-  pinMode(2, INPUT_PULLUP); //pinmodet säätää digitalpinnille XXX
+  pinMode(2, INPUT_PULLUP); //pinmodet säätää digitalpinnille vastuksen kaa
   pinMode(3, INPUT_PULLUP);
   pinMode(4, INPUT_PULLUP);
   pinMode(5, INPUT_PULLUP);
@@ -18,21 +18,15 @@ void initButtonsAndButtonInterrupts(void)
   digitalWrite(5, HIGH);
   digitalWrite(6, HIGH);
 
-  
-  // See requirements for this function from buttons.h
 }
 
 ISR(PCINT2_vect) //funktio pineille D0-D7, jossa on aikaraja painalluksille
  {
-    /*
-     Here you implement logic for handling
-	 interrupts from 2,3,4,5 pins for Game push buttons
-	 and for pin 6 for start Game push button.
-   */
+
   const unsigned long kynnysaika = 120;
   unsigned long aika = millis();
 
-  if (aika > merkattuaika + kynnysaika)
+  if (aika > merkattuaika + kynnysaika) //aikarajoite painalluksille
   {
     if (digitalRead(2) == LOW)
     {
@@ -54,7 +48,7 @@ ISR(PCINT2_vect) //funktio pineille D0-D7, jossa on aikaraja painalluksille
       Serial.println("5");
       buttonNumber = 5;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
     }
-    if (digitalRead(6) == LOW)
+    if (digitalRead(6) == LOW) // kutonen käynnistää pelin, tärkeä myöh ehkä
     {
       Serial.println("6");
       buttonNumber = 6;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
