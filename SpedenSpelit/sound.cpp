@@ -1,4 +1,6 @@
 #include "sound.h"
+#include "pitches.h"
+#include 
 
 const int buzzerPin = 7; // jos rakennetaan projektisuunnitelman mukaan, pinni 7 pitäisi olla vapaa
 
@@ -6,7 +8,9 @@ const int buzzerPin = 7; // jos rakennetaan projektisuunnitelman mukaan, pinni 7
 // Sound setup for the game
 void initializeSound(void)
 {
-
+    pinMode(buzzerPin, OUTPUT);
+    digitalWrite(buzzerPin, LOW);
+    Serial.println("Sound initialized");
 }
 
 
