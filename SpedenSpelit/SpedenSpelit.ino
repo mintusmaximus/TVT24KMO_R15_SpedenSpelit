@@ -10,6 +10,8 @@ volatile int buttonNumber = -1;           // for buttons interrupt handler
 volatile bool newTimerInterrupt = false;  // for timer interrupt handler
 int score = 0;
 
+bool newRandomNumberReady = false; // Flag to indicate that a new random number is ready to be used 
+
 void setup() {
   Serial.begin(9600);
   initializeDisplay();
@@ -56,12 +58,25 @@ void initializeTimer(void) {
 sei();
 	// void initializeTimer(void) 
 }
+
+
+/* 
+Timerin keskeytysten käsittelemiseksi.
+Communicate to loop() that it's time to make new random number.
+Increase timer interrupt rate after 10 interrupts.
+*/
 ISR(TIMER1_COMPA_vect) {
-  /* Timerin keskeytysten käsittelemiseksi.
-  Communicate to loop() that it's time to make new random number.
-  Increase timer interrupt rate after 10 interrupts.
-  */
-  
+
+  static int interruptCount = 0; // Static variable to count interrupts
+  interruptCount++; // Increment the interrupt count
+
+  if (interruptCount >= 10) {    // Increase the timer interrupt rate
+    OCR1A = OCR1A / 1.2; // Change the compare match value to increase the interrupt rate 
+    interruptCount = 0; // Reset the interrupt count
+  }
+
+  // Communicate to loop() that a new random number is ready
+  newRandomNumberReady = true; // set a flag
 }
 
 
