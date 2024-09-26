@@ -42,5 +42,4 @@ void startTheGame(void);
 
 void stopTheGame(void);
 
-
 #endif

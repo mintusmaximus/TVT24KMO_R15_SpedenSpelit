@@ -8,16 +8,18 @@
 // loop() function and interrupt handlers
 volatile int buttonNumber = -1;           // for buttons interrupt handler
 volatile bool newTimerInterrupt = false;  // for timer interrupt handler
+int score = 0;
 
 void setup() {
   Serial.begin(9600);
   initializeDisplay();
-  testDisplay(); // display numbers from 0 to 99
-  showResult(0); // after test, show 0
+  // testDisplay(); // display numbers from 0 to 99
+  showResult(score); // after test, show score (default 0)
 
   /*
     Initialize here all modules
   */
+
 }
 
 void loop() {
@@ -75,12 +77,34 @@ void checkGame(byte nbrOfButtonPush) {
   If the latest player button press is wrong, the game stops
   and if the latest press was right, game display is incremented
   by 1.
-  
+
+
   Parameters
   byte lastButtonPress of the player 0 or 1 or 2 or 3
 */
+byte lastButtonPress; // 0 or 1 or 2 or 3
+
+int compareArrays(int randomNumbers[], int userNumbers[], int nbrOfButtonPush)
+{
+    // Loop through the arrays up to the number of button presses.
+    for (int i = 0; i < nbrOfButtonPush; ++i)
+    {
+        // If any element does not match, call stopTheGame().
+        if (randomNumbers[i] != userNumbers[i])
+        {
+            stopTheGame();  // Tämä funktio kutsutaan, kun input on väärä.
+            return -1;  // Palauta -1, jos virhe löydetään.
+        }
+    }
+    // If all elements match, return 0 (indicating success).
+    incrementDisplay(); //increment gamedisplay by 1.
+    return 0;
 }
 
+void incrementDisplay() {
+  score++; // Increment the score
+  showResult(score); // Update the display with the new score
+}
 
 void initializeGame() {
 	/*
@@ -100,6 +124,7 @@ void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota j
   initializeGame(); // Kutsutaan initializeGame()-funktiota
   
    // enabloi Timer1 keskeytykset käynnistääkseen pelin
+   initializeGame();
 }
 
 void stopTheGame() {
