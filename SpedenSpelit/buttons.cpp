@@ -1,58 +1,67 @@
-#include "buttons.h"
+#include "buttons.h" //lisätään headeri, jossa definet buttonsiin liittyen
 unsigned long merkattuaika = 0; //aikakytkin, myöhemmin esillä
 
 void initButtonsAndButtonInterrupts(void)
 {
-  
-  
-  PCICR |= 0b00000100; //enabloi portti D auki (PCINT16-23), "or" bitwisellä kun haluan testata
-  PCMSK2 |= 0b01111100; //pinnit PCINT18-22 enabloitu interruptille
-  pinMode(2, INPUT_PULLUP); //pinmodet säätää digitalpinnille vastuksen kaa
-  pinMode(3, INPUT_PULLUP);
-  pinMode(4, INPUT_PULLUP);
-  pinMode(5, INPUT_PULLUP);
-  pinMode(6, INPUT_PULLUP);
-  digitalWrite(2, HIGH); //pinni puskee sähköä 
-  digitalWrite(3, HIGH);
-  digitalWrite(4, HIGH);
-  digitalWrite(5, HIGH);
-  digitalWrite(6, HIGH);
-
+  PCICR |= 0b00000100; //enabloi portti D interr (PCINT16-23(D0-7)) "or" bitwisellä kun haluan testata
+  PCMSK2 |= 0b01111100; //pinnit PCINT18-22 (eli D2-6) enabloitu interruptille
+  for (int i = 2; i <= 6; i++)
+  {
+    pinMode(i, INPUT_PULLUP); //pinmodet säätää digitalpinnille vastuksen 
+  }
 }
 
 ISR(PCINT2_vect) //funktio pineille D0-D7, jossa on aikaraja painalluksille
  {
 
-  const unsigned long kynnysaika = 120;
-  unsigned long aika = millis();
+  const unsigned long kynnysaika = 100; //debounssille kynnysaika jolloin painallusta ei lueta
+  unsigned long aika = millis(); //varastoi Arduinon laskema aika, uns. long pakollinen(manuaali)
 
   if (aika > merkattuaika + kynnysaika) //aikarajoite painalluksille
   {
-    if (digitalRead(2) == LOW)
+    uint8_t pinState = PIND & 0b01111100; //selite alimmaisena
+    if ((pinState & (1 << PIND2)) == 0) 
     {
-      //Serial.println("2");      
-      buttonNumber = 2;      // SELVITÄ KUULUUKO NÄÄ TÄNNE. INOSTA KOPIOITU    
+      buttonNumber = 2; //TARKISTA NÄÄ INOSTA KU VALMIS
     }
-    if (digitalRead(3) == LOW)
+    else if ((pinState & (1 << PIND3)) == 0) 
     {
-      //Serial.println("3");
-      buttonNumber = 3;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
+      buttonNumber = 3;
     }
-    if (digitalRead(4) == LOW)
+    else if ((pinState & (1 << PIND4)) == 0) 
     {
-      //Serial.println("4");
-      buttonNumber = 4;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
+      buttonNumber = 4;
     }
-    if (digitalRead(5) == LOW)
+    else if ((pinState & (1 << PIND5)) == 0) 
     {
-     // Serial.println("5");
-      buttonNumber = 5;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
+      buttonNumber = 5;
     }
-    if (digitalRead(6) == LOW) // kutonen käynnistää pelin, tärkeä myöh ehkä
+    else if ((pinState & (1 << PIND6)) == 0)
     {
-      //Serial.println("6");
-      buttonNumber = 6;      // SELVITÄ KUULUUKO NÄÄ TÄNNE
+      buttonNumber = 6;
+    }
     }
     merkattuaika = aika;
   }
-}
+
+/* toistuva DigitalRead ifien alla on hitaampi tapa käydä funktiossa katsomassa pinnien aktiivisuutta
+  joten siirsin haettavat luvut variaabeleihin suoraan. PIND on D-portin rekisteri, joka muuttuu 
+  pinnien tilan muuttuessa. pinstateen erotetaan &:lla 0b01111100 (käytetyt portit eli) ne bitit 
+  joita halutaan verrata PINDi paikkaa bitwisellä siirrettyyn binääriarvoon. Haetaan 0. Binääreillä 
+  tapahtumat ovat havainnollistavia.
+
+ESIMERKKI PINSTATESTA!  
+pind6 tuottaa 01000000 kun pin6=6 ja 1<< tekee siitä 0100000
+	pindstate   00111100 & = 0, tulostetaan
+  (pind       00111101)
+	
+	
+pin5 tuottaa  00100000
+	pindstate 	01011100 & = 0, tulostetaan
+  (pind 		  01011101)
+	
+
+MUTTA: pind 4 tuottaa 00010000       
+        jos pindstate 01011100 & != 0, ei tulosteta
+        (jos pind     01011101)
+  */
