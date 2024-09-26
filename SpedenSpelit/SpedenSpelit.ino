@@ -102,7 +102,6 @@ void checkGame(byte nbrOfButtonPush) {
   and if the latest press was right, game display is incremented
   by 1.
 
-
   Parameters
   byte lastButtonPress of the player 0 or 1 or 2 or 3
 */
@@ -137,16 +136,35 @@ void initializeGame() {
   needed to store random numbers and player button push data.
   This function is called from startTheGame() function.
   */
-
+int randomNumbers[100]= {0}; 
+int userNumbers[100] = {0};
+byte nbrOfButtonPush = 0;
+ 
 }
 
 void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota ja enabloi Timer1 keskeytykset käynnistääkseen pelin
   initializeGame(); // Kutsutaan initializeGame()-funktiota
+
+  // tulosta serial monitoriin, kun funktio alkaa
+
+serial.println("startTheGame function starting!");
   
-   // enabloi Timer1 keskeytykset käynnistääkseen pelin
+  // enabloi Timer1 compare keskeytykset
+  TIMSK1 |= (1 << OCIE1A); 
+
+  // Kutsutaan initializeGame()-funktiota
    initializeGame();
 }
 
 void stopTheGame() {
-  // StopTheGame funktio disabloi Timer1 keskeytykset 
+
+  // tulosta serial monitoriin, kun funktio alkaa
+
+serial.println("stopTheGame function starting!");
+
+  // disabloi Timer1 compare keskeytykset 
+
+  TIMSK1 &= ~(1 << OCIE1A); 
+
+
 }
