@@ -13,7 +13,6 @@ void initButtonsAndButtonInterrupts(void)
 
 ISR(PCINT2_vect) //funktio pineille D0-D7, jossa on aikaraja painalluksille
  {
-
   const unsigned long kynnysaika = 100; //debounssille kynnysaika jolloin painallusta ei lueta
   unsigned long aika = millis(); //varastoi Arduinon laskema aika, uns. long pakollinen(manuaali)
 
