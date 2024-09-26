@@ -10,7 +10,10 @@ volatile int buttonNumber = -1;           // for buttons interrupt handler
 volatile bool newTimerInterrupt = false;  // for timer interrupt handler
 int score = 0;
 
+
 bool newRandomNumberReady = false; // Flag to indicate that a new random number is ready to be used 
+int globalRandomNumber = 0; // Global variable to store the random number
+
 
 void setup() {
   Serial.begin(9600);
@@ -66,7 +69,6 @@ Communicate to loop() that it's time to make new random number.
 Increase timer interrupt rate after 10 interrupts.
 */
 ISR(TIMER1_COMPA_vect) {
-
   static int interruptCount = 0; // Static variable to count interrupts
   interruptCount++; // Increment the interrupt count
 
@@ -76,6 +78,7 @@ ISR(TIMER1_COMPA_vect) {
   }
 
   // Communicate to loop() that a new random number is ready
+  globalRandomNumber = random(0, 4); // Generate a new random number
   newRandomNumberReady = true; // set a flag
 }
 
