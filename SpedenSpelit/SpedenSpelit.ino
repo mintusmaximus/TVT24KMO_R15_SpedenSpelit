@@ -9,7 +9,14 @@
 volatile int buttonNumber = -1;           // for buttons interrupt handler
 volatile bool newTimerInterrupt = false;  // for timer interrupt handler
 int score = 0;
+int ledmuuttuja;
 
+// Arvotut numerot talletetaan 100 alkion mittaiseen taulukkoon (randomNumbers)
+int randomNumbers[100]; 
+// Kun käyttäjä painaa kytkimiä 0,1,2,3 nämä näppäinten painallukset talletetaan taulukkoon (userNumbers)
+int userNumbers[100];
+// Indeksi, joka seuraa missä kohtaa taulukkoa mennään eli monestikko käyttäjä on painanut nappeja
+byte nbrOfButtonPush = 0; //byte-tyyppi, koska arvo ei ylitä 255 ja käyttää vähemmän muistia. oli käytetty muualla koodissa myös.
 
 bool newRandomNumberReady = false; // Flag to indicate that a new random number is ready to be used 
 int globalRandomNumber = 0; // Global variable to store the random number
@@ -36,7 +43,7 @@ void loop() {
      if(buttonNumber >= 0 && buttonNumber < 4) { // check the game if 0<=buttonNumber<4
       userNumbers[nbrOfButtonPush] = buttonNumber; // Tallentaa käyttäjän painaman numeron taulukkoon
       nbrOfButtonPush++;
-      checkGame();
+      checkGame(nbrOfButtonPush);
      }
   }
 
@@ -100,7 +107,8 @@ void checkGame(byte nbrOfButtonPush) {
   Parameters
   byte lastButtonPress of the player 0 or 1 or 2 or 3
 */
-byte lastButtonPress; // 0 or 1 or 2 or 3
+  byte lastButtonPress; // 0 or 1 or 2 or 3
+}
 
 int compareArrays(int randomNumbers[], int userNumbers[], int nbrOfButtonPush)
 {
@@ -130,12 +138,7 @@ void initializeGame() {
   needed to store random numbers and player button push data.
   This function is called from startTheGame() function.
   */
-  // Arvotut numerot talletetaan 100 alkion mittaiseen taulukkoon (randomNumbers)
-  int randomNumbers[100]; 
-  // Kun käyttäjä painaa kytkimiä 0,1,2,3 nämä näppäinten painallukset talletetaan taulukkoon (userNumbers)
-  int userNumbers[100];
-  // Indeksi, joka seuraa missä kohtaa taulukkoa mennään eli monestikko käyttäjä on painanut nappeja
-  byte nbrOfButtonPush = 0; //byte-tyyppi, koska arvo ei ylitä 255 ja käyttää vähemmän muistia. oli käytetty muualla koodissa myös.
+
 }
 
 void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota ja enabloi Timer1 keskeytykset käynnistääkseen pelin

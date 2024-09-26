@@ -7,6 +7,7 @@
 
 extern unsigned long merkattuaika; // asettaa ajan, jolloin painallus on tapahtunut
 extern const unsigned long kynnysaika; // aikaraja painalluksille
+extern volatile int buttonNumber;
 
 const byte firstPin = 2; // First PinChangeInterrupt on D-bus
 const byte lastPin =  5; // Last PinChangeInterrupt on D-bus
