@@ -1,6 +1,5 @@
 #include "sound.h"
 #include "pitches.h"
-#include 
 
 const int buzzerPin = 7; // jos rakennetaan projektisuunnitelman mukaan, pinni 7 pitäisi olla vapaa
 
