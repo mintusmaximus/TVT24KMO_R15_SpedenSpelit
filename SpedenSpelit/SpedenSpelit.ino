@@ -25,13 +25,12 @@ int globalRandomNumber = 0; // Global variable to store the random number
 void setup() {
   Serial.begin(9600);
   initializeDisplay();
+  initializeLeds();
+  initializeSound();
+  initializeTimer();
+  initButtonsAndButtonInterrupts();
   // testDisplay(); // display numbers from 0 to 99
   showResult(score); // after test, show score (default 0)
-
-  /*
-    Initialize here all modules
-  */
-
 }
 
 void loop() {
