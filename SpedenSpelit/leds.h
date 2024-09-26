@@ -2,6 +2,9 @@
 #define LEDS_H
 #include <arduino.h>
 
+const byte ledPins[] = {A2, A3, A4, A5}; //Analogi pinnien alustukseen
+const int ledCount = 4; // käytössä 4 lediä
+
 /*
   initializeLeds() subroutine intializes analog pins A2,A3,A4,A5
   to be used as outputs. Speden Spelit leds are connected to those
