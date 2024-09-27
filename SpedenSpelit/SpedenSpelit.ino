@@ -44,6 +44,7 @@ void loop() {
       nbrOfButtonPush++;
       checkGame(nbrOfButtonPush);
      }
+     buttonNumber = -1; // Resetoi buttonNumber että ei pyöri loputtomasti 
   }
 
   if(newTimerInterrupt == true) {
@@ -105,7 +106,9 @@ void checkGame(byte nbrOfButtonPush) {
   Parameters
   byte lastButtonPress of the player 0 or 1 or 2 or 3
 */
-  compareArrays(); // Kutsutaan funktiota, joka tekee kaiken yllämainitun
+  if (compareArrays(randomNumbers, userNumbers, nbrOfButtonPush) == -1) { // jos vertailu ei mene läpi, kutsu stopTheGame()-funktiota
+    stopTheGame(); // Stop the game if the input is wrong
+  }
   byte lastButtonPress; // 0 or 1 or 2 or 3
 }
 
@@ -148,7 +151,7 @@ void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota j
 
   // tulosta serial monitoriin, kun funktio alkaa
 
-  serial.println("startTheGame function starting!");
+  Serial.println("startTheGame function starting!");
   
   // enabloi Timer1 compare keskeytykset
   TIMSK1 |= (1 << OCIE1A); 
@@ -161,7 +164,7 @@ void stopTheGame() {
 
   // tulosta serial monitoriin, kun funktio alkaa
 
-  serial.println("stopTheGame function starting!");
+  Serial.println("stopTheGame function starting!");
 
   // disabloi Timer1 compare keskeytykset 
 
