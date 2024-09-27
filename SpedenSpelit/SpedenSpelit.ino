@@ -52,7 +52,7 @@ void loop() {
     // Printing the output
     Serial.println(myRand);
      // and corresponding led must be activated
-     ledmuuttuja = myRand; // ledmuuttuja = random(1,5); oli tässä aluksi
+     ledmuuttuja = myRand;
   }
 }
 
@@ -105,6 +105,7 @@ void checkGame(byte nbrOfButtonPush) {
   Parameters
   byte lastButtonPress of the player 0 or 1 or 2 or 3
 */
+  compareArrays(); // Kutsutaan funktiota, joka tekee kaiken yllämainitun
   byte lastButtonPress; // 0 or 1 or 2 or 3
 }
 
@@ -136,9 +137,9 @@ void initializeGame() {
   needed to store random numbers and player button push data.
   This function is called from startTheGame() function.
   */
-int randomNumbers[100]= {0}; 
-int userNumbers[100] = {0};
-byte nbrOfButtonPush = 0;
+  int randomNumbers[100]= {0}; 
+  int userNumbers[100] = {0};
+  byte nbrOfButtonPush = 0;
  
 }
 
@@ -147,7 +148,7 @@ void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota j
 
   // tulosta serial monitoriin, kun funktio alkaa
 
-serial.println("startTheGame function starting!");
+  serial.println("startTheGame function starting!");
   
   // enabloi Timer1 compare keskeytykset
   TIMSK1 |= (1 << OCIE1A); 
@@ -160,7 +161,7 @@ void stopTheGame() {
 
   // tulosta serial monitoriin, kun funktio alkaa
 
-serial.println("stopTheGame function starting!");
+  serial.println("stopTheGame function starting!");
 
   // disabloi Timer1 compare keskeytykset 
 
