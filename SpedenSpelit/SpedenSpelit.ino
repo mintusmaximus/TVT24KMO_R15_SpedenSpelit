@@ -9,7 +9,7 @@
 volatile int buttonNumber = -1;           // for buttons interrupt handler
 volatile bool newTimerInterrupt = false;  // for timer interrupt handler
 int score = 0;
-int ledmuuttuja;
+byte ledNumber = 0;
 
 // Arvotut numerot talletetaan 100 alkion mittaiseen taulukkoon (randomNumbers)
 int randomNumbers[100]; 
@@ -53,7 +53,7 @@ void loop() {
     // Printing the output
     Serial.println(myRand);
      // and corresponding led must be activated
-     ledmuuttuja = myRand;
+     ledNumber = myRand;
   }
 }
 
