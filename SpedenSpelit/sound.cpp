@@ -23,38 +23,38 @@ void initializeSound(void)
 void playGameStartSound(void)
 {
     for (int i = 0; i < 8; i++){
-        tone(buzzerpin, startsound[i], 200)
+        tone(buzzerPin, startsound[i], 200);
         delay(300);
-        noTone(buzzerpin);
+        noTone(buzzerPin);
     }
     
 }
 void playButtonOneSelected(void)
 {
-    tone(buzzerpin, NOTE_F5, 150)
+    tone(buzzerPin, NOTE_F5, 150);
     delay(150);
-    noTone(buzzerpin);
+    noTone(buzzerPin);
 }
 
 void playButtonTwoSelected(void)
 {
-    tone(buzzerpin, NOTE_D5, 150)
+    tone(buzzerPin, NOTE_D5, 150);
     delay(150);
-    noTone(buzzerpin);
+    noTone(buzzerPin);
 }
 
 void playButtonThreeSelected(void)
 {
-    tone(buzzerpin, NOTE_B4, 150)
+    tone(buzzerPin, NOTE_B4, 150);
     delay(150);
-    noTone(buzzerpin);
+    noTone(buzzerPin);
 }
 
 void playButtonFourSelected(void)
 {
-    tone(buzzerpin, NOTE_G4, 150)
+    tone(buzzerPin, NOTE_G4, 150);
     delay(150);
-    noTone(buzzerpin);
+    noTone(buzzerPin);
 }
 
 

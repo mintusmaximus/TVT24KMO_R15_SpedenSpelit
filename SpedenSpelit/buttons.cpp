@@ -3,18 +3,18 @@ unsigned long merkattuaika = 0; //aikakytkin, myöhemmin esillä
 
 void initButtonsAndButtonInterrupts(void)
 {
-  PCICR |= 0b00000100; //enabloi portti D interr (PCINT16-23(D0-7)) "or" bitwisellä kun haluan testata
-  PCMSK2 |= 0b01111100; //pinnit PCINT18-22 (eli D2-6) enabloitu interruptille
+  PCICR |= 0b00000100; //port D interrupt register (PCINT16-23(D0-7)) "or" bitwisellä kun haluan testata
+  PCMSK2 |= 0b01111100; //pinnit intterupt register PCINT18-22 (eli D2-6)
   for (int i = 2; i <= 6; i++)
   {
-    pinMode(i, INPUT_PULLUP); //pinmodet säätää digitalpinnille vastuksen 
+    pinMode(i, INPUT_PULLUP); //pinmodet säätää digitalpinnille vastuksen, pinnit HIGH 
   }
 }
 
 ISR(PCINT2_vect) //funktio pineille D0-D7, jossa on aikaraja painalluksille
  {
   const unsigned long kynnysaika = 100; //debounssille kynnysaika jolloin painallusta ei lueta
-  unsigned long aika = millis(); //varastoi Arduinon laskema aika, uns. long pakollinen(manuaali)
+  unsigned long aika = millis(); //varastoi Arduinon laskema aika, uns.long pakollinen(manuaali)
 
   if (aika > merkattuaika + kynnysaika) //aikarajoite painalluksille
   {
