@@ -56,6 +56,7 @@ void loop() {
     Serial.println(myRand);
      // and corresponding led must be activated
      ledNumber = myRand;
+     setLed(ledNumber); // yritetään sytyttää ledi, toimivuus ei ole testattu
   }
 }
 
