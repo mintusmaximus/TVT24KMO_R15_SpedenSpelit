@@ -8,6 +8,7 @@
 // loop() function and interrupt handlers
 volatile int buttonNumber = -1;           // for buttons interrupt handler
 volatile bool newTimerInterrupt = false;  // for timer interrupt handler
+bool gameStarted = false; // Muuttuja pelin tilalle
 int score = 0;
 byte ledNumber = 0;
 
@@ -35,8 +36,9 @@ void setup() {
 
 void loop() {
   if(buttonNumber>=0) {
-     if(buttonNumber==4) { // start the game if buttonNumber == 4
+     if(buttonNumber==4 && !gameStarted) { // start the game if buttonNumber == 4 ja jos peliä ei ole jo aloitettu
       startTheGame();
+      gameStarted = true; // Merkitään peli käynnistyneeksi
      }
 
      if(buttonNumber >= 0 && buttonNumber < 4) { // check the game if 0<=buttonNumber<4
@@ -169,6 +171,15 @@ void stopTheGame() {
   // disabloi Timer1 compare keskeytykset 
 
   TIMSK1 &= ~(1 << OCIE1A); 
+  gameStarted = false; // Pelin tila ei-aloitetuksi
+  nbrOfButtonPush = 0; // Nollataan nappejen painallukset
+  // Nollataan randomNumbers-taulukko
+  for (int i = 0; i < 100; i++) {
+    randomNumbers[i] = 0;
+  }
 
-
+  // Nollataan userNumbers-taulukko
+  for (int i = 0; i < 100; i++) {
+    userNumbers[i] = 0;
+  }
 }
