@@ -22,6 +22,7 @@ byte nbrOfButtonPush = 0; //byte-tyyppi, koska arvo ei ylitä 255 ja käyttää 
 bool newRandomNumberReady = false; // Flag to indicate that a new random number is ready to be used 
 int globalRandomNumber = 0; // Global variable to store the random number
 
+bool timeToCheckGame = false;
 
 void setup() {
   Serial.begin(9600);
@@ -36,26 +37,42 @@ void setup() {
 
 void loop() {
   if(buttonNumber>=0) {
-     if(buttonNumber==4 && !gameStarted) { // start the game if buttonNumber == 4 ja jos peliä ei ole jo aloitettu
+     if(buttonNumber==5 && !gameStarted) { // start the game if buttonNumber == 5 (näppäin 4) ja jos peliä ei ole jo aloitettu
       startTheGame();
       gameStarted = true; // Merkitään peli käynnistyneeksi
      }
-
-     if(buttonNumber >= 0 && buttonNumber < 5) { // check the game if 0<=buttonNumber<5
-      userNumbers[nbrOfButtonPush] = buttonNumber; // Tallentaa käyttäjän painaman numeron taulukkoon
+     else if (buttonNumber == 6) { // stop the game if buttonNumber == 6 (reset button)
+      stopTheGame();
+     }
+     else if (gameStarted && buttonNumber >= 2 && buttonNumber <= 5) { // if the game is started and the buttonNumber is between 2 and 5 (game buttons)
+      userNumbers[nbrOfButtonPush] = buttonNumber - 2; // Tallentaa käyttäjän painaman numeron taulukkoon, buttonNumber - 2, koska näppäinten numerojärjestys ei ole sama kuin ledin numerojärjestys
+      Serial.print("Käyttäjän painama näppäin: ");
+      Serial.println(userNumbers[nbrOfButtonPush]);
       nbrOfButtonPush++;
-      checkGame(nbrOfButtonPush);
+      // checkGame(nbrOfButtonPush); // kutsutaan checkGame funktiota
+      timeToCheckGame = true; // kutsutaan checkGame funktiota myöhemmin
      }
      buttonNumber = -1; // Resetoi buttonNumber että ei pyöri loputtomasti 
   }
 
-  if(newTimerInterrupt == true) {
-     // new random number must be generated
-    int myRand = random(1,5);
+  if(newTimerInterrupt && gameStarted) {  // Jos on aika luoda uusi numero ja peli on käynnissä 
+    ledNumber = globalRandomNumber; // asettaa ledin numeron timerin mukaan
+    Serial.print("Ledin numero: ");
+    Serial.println(ledNumber);
+    setLed(ledNumber); // asettaa ledin
+    randomNumbers[nbrOfButtonPush] = globalRandomNumber; // tallentaa numeron taulukkoon
+    newTimerInterrupt = false; // resetoi interruptin
+    // new random number must be generated
+    // int myRand = random(1,5);
     // Printing the output
-    Serial.println(myRand);
+    // Serial.println(myRand);
      // and corresponding led must be activated
-     ledNumber = myRand;
+    //  ledNumber = myRand;
+  }
+  if(timeToCheckGame) {
+    Serial.println("timeToCheckGame");
+    checkGame(nbrOfButtonPush);
+    timeToCheckGame = false;
   }
 }
 
@@ -67,6 +84,8 @@ void initializeTimer(void) {
   TCNT1  = 0;//initialize counter value to 0
   // set compare match register for 1hz increments
   OCR1A = 15624;// = (16*10^6) / (1*1024) - 1 (must be <65536)
+  TCCR1B |= (1 << WGM12);  // CTC mode
+  TCCR1B |= (1 << CS12) | (1 << CS10);  // 1024 prescaler
 sei();
 	// void initializeTimer(void) 
 }
@@ -82,13 +101,14 @@ ISR(TIMER1_COMPA_vect) {
   interruptCount++; // Increment the interrupt count
 
   if (interruptCount >= 10) {    // Increase the timer interrupt rate
-    OCR1A = OCR1A / 1.2; // Change the compare match value to increase the interrupt rate 
+    OCR1A = OCR1A / 1.1; // Change the compare match value to increase the interrupt rate 
     interruptCount = 0; // Reset the interrupt count
   }
 
   // Communicate to loop() that a new random number is ready
   globalRandomNumber = random(0, 4); // Generate a new random number
   newRandomNumberReady = true; // set a flag
+  newTimerInterrupt = true;
 }
 
 
@@ -148,9 +168,11 @@ void initializeGame() {
   nbrOfButtonPush = 0; // Nollataan nappejen painallukset
 }
  
-}
+
 
 void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota ja enabloi Timer1 keskeytykset käynnistääkseen pelin
+  score = 0;  
+  showResult(score); // nollataan tulostaulukko
   // tulosta serial monitoriin, kun funktio alkaa
 
   Serial.println("startTheGame function starting!");
@@ -173,4 +195,7 @@ void stopTheGame() {
   TIMSK1 &= ~(1 << OCIE1A); 
 
   gameStarted = false; // Pelin tila ei-aloitetuksi
+
+  setAllLeds(); // kaikki ledit päälle että huomataan että peli on päättynyt
+
 }
