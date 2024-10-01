@@ -41,7 +41,7 @@ void loop() {
       gameStarted = true; // Merkitään peli käynnistyneeksi
      }
 
-     if(buttonNumber >= 0 && buttonNumber < 4) { // check the game if 0<=buttonNumber<4
+     if(buttonNumber >= 0 && buttonNumber < 5) { // check the game if 0<=buttonNumber<5
       userNumbers[nbrOfButtonPush] = buttonNumber; // Tallentaa käyttäjän painaman numeron taulukkoon
       nbrOfButtonPush++;
       checkGame(nbrOfButtonPush);
@@ -141,11 +141,11 @@ void initializeGame() {
   needed to store random numbers and player button push data.
   This function is called from startTheGame() function.
   */
-   for (int i = 0; i < 100; i++) {
+   for (int i = 0; i < 100; i++) { // Nollataan taulukot
     randomNumbers[i] = 0;
     userNumbers[i] = 0;
   }
-  nbrOfButtonPush = 0;
+  nbrOfButtonPush = 0; // Nollataan nappejen painallukset
 }
  
 }
@@ -171,15 +171,6 @@ void stopTheGame() {
   // disabloi Timer1 compare keskeytykset 
 
   TIMSK1 &= ~(1 << OCIE1A); 
-  gameStarted = false; // Pelin tila ei-aloitetuksi
-  nbrOfButtonPush = 0; // Nollataan nappejen painallukset
-  // Nollataan randomNumbers-taulukko
-  for (int i = 0; i < 100; i++) {
-    randomNumbers[i] = 0;
-  }
 
-  // Nollataan userNumbers-taulukko
-  for (int i = 0; i < 100; i++) {
-    userNumbers[i] = 0;
-  }
+  gameStarted = false; // Pelin tila ei-aloitetuksi
 }
