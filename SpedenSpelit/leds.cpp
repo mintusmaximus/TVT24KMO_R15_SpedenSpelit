@@ -81,3 +81,12 @@ int maxNopeus = 100;
  }
 }
 }
+
+void ledEndGame()
+{
+  setAllLeds();
+  delay(500);
+  clearAllLeds();
+  delay(500);
+  }
+}
