@@ -141,15 +141,16 @@ void initializeGame() {
   needed to store random numbers and player button push data.
   This function is called from startTheGame() function.
   */
-  int randomNumbers[100]= {0}; 
-  int userNumbers[100] = {0};
-  byte nbrOfButtonPush = 0;
+   for (int i = 0; i < 100; i++) {
+    randomNumbers[i] = 0;
+    userNumbers[i] = 0;
+  }
+  nbrOfButtonPush = 0;
+}
  
 }
 
 void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota ja enabloi Timer1 keskeytykset käynnistääkseen pelin
-  initializeGame(); // Kutsutaan initializeGame()-funktiota
-
   // tulosta serial monitoriin, kun funktio alkaa
 
   Serial.println("startTheGame function starting!");
