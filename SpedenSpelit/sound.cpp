@@ -8,6 +8,9 @@ const int buzzerPin = 7; // jos rakennetaan projektisuunnitelman mukaan, pinni 7
 int startsound[] = {
   NOTE_F4, NOTE_A4, NOTE_F5, NOTE_E5, NOTE_F5, NOTE_F6, NOTE_F7
 };
+int endsound[] = {
+    NOTE_F4, NOTE_E4, NOTE_DS4, NOTE_D4, NOTE_CS4 
+};
 
 
 // Sound setup for the game
@@ -19,12 +22,12 @@ void initializeSound(void)
 }
 
 
-// Sound for the start of the game
+// Sound for the start of the game. Menee inoStartTheGame() ekaksi
 void playGameStartSound(void)
 {
-    for (int i = 0; i < 8; i++){
-        tone(buzzerPin, startsound[i], 200);
-        delay(300);
+    for (int i = 0; i < 7; i++){
+        tone(buzzerPin, startsound[i], 150);
+        delay(250);
         noTone(buzzerPin);
     }
     
@@ -32,7 +35,7 @@ void playGameStartSound(void)
 void playButtonOneSelected(void)
 {
     tone(buzzerPin, NOTE_F5, 150);
-    delay(150);
+    delay(150); //kaikki delayt saattanee valittunapeista joutua poistaan(delayt valmiina) 
     noTone(buzzerPin);
 }
 
@@ -59,12 +62,18 @@ void playButtonFourSelected(void)
 
 
 
-// Sound for the end of the game
+// Sound for the end of the game. Menee Stopthegame()n loppuun
 void playGameEndSound(void)
 {
-
+    for (int i = 0; i < 4; i++){
+        tone(buzzerPin, endsound[i], 110);
+        delay(120);
+        noTone(buzzerPin);
 }
-
+    tone(buzzerPin, endsound[4], 260);
+    delay(280);
+    noTone(buzzerPin);
+}
 
 // Sound for a correct answer
 void playCorrectSound(void)
