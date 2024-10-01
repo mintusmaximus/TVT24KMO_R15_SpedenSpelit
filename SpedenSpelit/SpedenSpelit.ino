@@ -45,7 +45,9 @@ void loop() {
       stopTheGame();
      }
      else if (gameStarted && buttonNumber >= 2 && buttonNumber <= 5) { // if the game is started and the buttonNumber is between 2 and 5 (game buttons)
-      userNumbers[nbrOfButtonPush] = buttonNumber; // Tallentaa käyttäjän painaman numeron taulukkoon
+      userNumbers[nbrOfButtonPush] = buttonNumber - 2; // Tallentaa käyttäjän painaman numeron taulukkoon, buttonNumber - 2, koska näppäinten numerojärjestys ei ole sama kuin ledin numerojärjestys
+      Serial.print("Käyttäjän painama näppäin: ");
+      Serial.println(userNumbers[nbrOfButtonPush]);
       nbrOfButtonPush++;
       // checkGame(nbrOfButtonPush); // kutsutaan checkGame funktiota
       timeToCheckGame = true; // kutsutaan checkGame funktiota myöhemmin
@@ -55,6 +57,8 @@ void loop() {
 
   if(newTimerInterrupt && gameStarted) {  // Jos on aika luoda uusi numero ja peli on käynnissä 
     ledNumber = globalRandomNumber; // asettaa ledin numeron timerin mukaan
+    Serial.print("Ledin numero: ");
+    Serial.println(ledNumber);
     setLed(ledNumber); // asettaa ledin
     randomNumbers[nbrOfButtonPush] = globalRandomNumber; // tallentaa numeron taulukkoon
     newTimerInterrupt = false; // resetoi interruptin
@@ -167,6 +171,8 @@ void initializeGame() {
 
 
 void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota ja enabloi Timer1 keskeytykset käynnistääkseen pelin
+  score = 0;  
+  showResult(score); // nollataan tulostaulukko
   // tulosta serial monitoriin, kun funktio alkaa
 
   Serial.println("startTheGame function starting!");
@@ -189,4 +195,7 @@ void stopTheGame() {
   TIMSK1 &= ~(1 << OCIE1A); 
 
   gameStarted = false; // Pelin tila ei-aloitetuksi
+
+  setAllLeds(); // kaikki ledit päälle että huomataan että peli on päättynyt
+
 }
