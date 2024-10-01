@@ -111,7 +111,6 @@ void checkGame(byte nbrOfButtonPush) {
   if (compareArrays(randomNumbers, userNumbers, nbrOfButtonPush) == -1) { // jos vertailu ei mene läpi, kutsu stopTheGame()-funktiota
     stopTheGame(); // Stop the game if the input is wrong
   }
-  byte lastButtonPress; // 0 or 1 or 2 or 3
 }
 
 int compareArrays(int randomNumbers[], int userNumbers[], int nbrOfButtonPush)
@@ -122,7 +121,7 @@ int compareArrays(int randomNumbers[], int userNumbers[], int nbrOfButtonPush)
         // If any element does not match, call stopTheGame().
         if (randomNumbers[i] != userNumbers[i])
         {
-            stopTheGame();  // Tämä funktio kutsutaan, kun input on väärä.
+            // Tämä funktio kutsutaan, kun input on väärä.
             return -1;  // Palauta -1, jos virhe löydetään.
         }
     }
