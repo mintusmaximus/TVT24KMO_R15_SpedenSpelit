@@ -81,3 +81,17 @@ int maxNopeus = 100;
  }
 }
 }
+
+void ledEndGame()
+{
+  for(int i = 0; i < 3; i++){
+    for(int j = 0; j < ledCount; j++){
+      digitalWrite(ledPins[j], HIGH);
+    }
+    delay(500);
+    for(int j = 0; j < ledCount; j++){
+      digitalWrite(ledPins[j], LOW);
+    }
+    delay(500);
+  }
+}
