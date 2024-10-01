@@ -107,7 +107,7 @@ void checkGame(byte nbrOfButtonPush) {
 
   Parameters
   byte lastButtonPress of the player 0 or 1 or 2 or 3
-*/
+  */
   if (compareArrays(randomNumbers, userNumbers, nbrOfButtonPush) == -1) { // jos vertailu ei mene läpi, kutsu stopTheGame()-funktiota
     stopTheGame(); // Stop the game if the input is wrong
   }
