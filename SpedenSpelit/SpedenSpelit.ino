@@ -10,7 +10,7 @@ volatile int buttonNumber = -1;           // for buttons interrupt handler
 volatile bool newTimerInterrupt = false;  // for timer interrupt handler
 bool gameStarted = false; // Muuttuja pelin tilalle
 int score = 0;
-byte ledNumber = 0;
+extern byte ledNumber = 0;
 
 // Arvotut numerot talletetaan 100 alkion mittaiseen taulukkoon (randomNumbers)
 int randomNumbers[100]; 
@@ -44,21 +44,24 @@ void loop() {
      else if (buttonNumber == 6) { // stop the game if buttonNumber == 6 (reset button)
       stopTheGame();
      }
-     else if (gameStarted && buttonNumber >= 2 && buttonNumber <= 5) { // if the game is started and the buttonNumber is between 2 and 5 (game buttons)
-      userNumbers[nbrOfButtonPush] = buttonNumber - 2; // Tallentaa käyttäjän painaman numeron taulukkoon, buttonNumber - 2, koska näppäinten numerojärjestys ei ole sama kuin ledin numerojärjestys
-      Serial.print("Käyttäjän painama näppäin: ");
-      Serial.println(userNumbers[nbrOfButtonPush]);
+     else if (gameStarted && buttonNumber >= 1 && buttonNumber <= 4) { // if the game is started and the buttonNumber is between 2 and 5 (game buttons)
+      userNumbers[nbrOfButtonPush] = buttonNumber; // Tallentaa käyttäjän painaman numeron taulukkoon
+      
       nbrOfButtonPush++;
       // checkGame(nbrOfButtonPush); // kutsutaan checkGame funktiota
       timeToCheckGame = true; // kutsutaan checkGame funktiota myöhemmin
      }
      buttonNumber = -1; // Resetoi buttonNumber että ei pyöri loputtomasti 
+  Serial.print("globalRandomNumber : "); // POISTA
+  Serial.println(globalRandomNumber); //POISTA
   }
 
   if(newTimerInterrupt && gameStarted) {  // Jos on aika luoda uusi numero ja peli on käynnissä 
     ledNumber = globalRandomNumber; // asettaa ledin numeron timerin mukaan
-    Serial.print("Ledin numero: ");
-    Serial.println(ledNumber);
+    Serial.print("ledNumber : ");      //POISTA
+    Serial.println(ledNumber);           //POISTA
+    //Serial.println(globalRandomNumber); //POISTA
+    //Serial.println(buttonNumber);       //POISTA
     setLed(ledNumber); // asettaa ledin
     randomNumbers[nbrOfButtonPush] = globalRandomNumber; // tallentaa numeron taulukkoon
     newTimerInterrupt = false; // resetoi interruptin
@@ -71,7 +74,7 @@ void loop() {
   }
   if(timeToCheckGame) {
     Serial.println("timeToCheckGame");
-    checkGame(nbrOfButtonPush);
+    checkGame(nbrOfButtonPush, randomNumbers, userNumbers); // poita randomnumber, usernumber
     timeToCheckGame = false;
   }
 }
@@ -106,13 +109,13 @@ ISR(TIMER1_COMPA_vect) {
   }
 
   // Communicate to loop() that a new random number is ready
-  globalRandomNumber = random(0, 4); // Generate a new random number
+  globalRandomNumber = random(1, 5); // Generate a new random number
   newRandomNumberReady = true; // set a flag
   newTimerInterrupt = true;
 }
 
 
-void checkGame(byte nbrOfButtonPush) {
+void checkGame(byte nbrOfButtonPush, int randomNumbers[], int userNumbers[]) { //poista randomnumber ja usernumber
 	// käyttäjän inputin tarkistamiseen.
 
   /* CheckGame aliohjelma vertaa randomNumbers ja userNumbers taulukoita aina siihen 
@@ -128,7 +131,15 @@ void checkGame(byte nbrOfButtonPush) {
   Parameters
   byte lastButtonPress of the player 0 or 1 or 2 or 3
   */
+    for (int i = 0; i < 10; i++){ //poista
+      Serial.println(randomNumbers[i]); //poista
+      Serial.println(userNumbers[i]); // poista
+      //Serial.println(nbrOfButtonPush[i]); //poista
+    } //poista
+
   if (compareArrays(randomNumbers, userNumbers, nbrOfButtonPush) == -1) { // jos vertailu ei mene läpi, kutsu stopTheGame()-funktiota
+
+    
     stopTheGame(); // Stop the game if the input is wrong
   }
 }
@@ -171,10 +182,8 @@ void initializeGame() {
 
 
 void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota ja enabloi Timer1 keskeytykset käynnistääkseen pelin
-  score = 0;  
-  showResult(score); // nollataan tulostaulukko
   // tulosta serial monitoriin, kun funktio alkaa
-
+  playGameStartSound();
   Serial.println("startTheGame function starting!");
   
   // enabloi Timer1 compare keskeytykset
@@ -185,7 +194,7 @@ void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota j
 }
 
 void stopTheGame() {
-
+  
   // tulosta serial monitoriin, kun funktio alkaa
 
   Serial.println("stopTheGame function starting!");
@@ -195,7 +204,6 @@ void stopTheGame() {
   TIMSK1 &= ~(1 << OCIE1A); 
 
   gameStarted = false; // Pelin tila ei-aloitetuksi
-
-  setAllLeds(); // kaikki ledit päälle että huomataan että peli on päättynyt
-
+  ledEndGame();
+  playGameEndSound();
 }

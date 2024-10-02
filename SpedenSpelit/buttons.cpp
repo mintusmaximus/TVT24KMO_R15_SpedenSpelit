@@ -12,7 +12,7 @@ void initButtonsAndButtonInterrupts(void)
 }
 
 ISR(PCINT2_vect) //funktio pineille D0-D7, jossa on aikaraja painalluksille
- {
+{
   const unsigned long kynnysaika = 140; //debounssille kynnysaika jolloin painallusta ei lueta
   unsigned long aika = millis(); //varastoi Arduinon laskema aika, uns.long pakollinen(manuaali)
 
@@ -21,27 +21,28 @@ ISR(PCINT2_vect) //funktio pineille D0-D7, jossa on aikaraja painalluksille
     uint8_t pinState = PIND & 0b01111100; //selite alimmaisena
     if ((pinState & (1 << PIND2)) == 0) 
     {
-      buttonNumber = 2; //TARKISTA NÄÄ INOSTA KU VALMIS
+      buttonNumber = 1; //TARKISTA NÄÄ INOSTA KU VALMIS
     }
     else if ((pinState & (1 << PIND3)) == 0) 
     {
-      buttonNumber = 3;
+      buttonNumber = 2;
     }
     else if ((pinState & (1 << PIND4)) == 0) 
     {
-      buttonNumber = 4;
+      buttonNumber = 3;
     }
     else if ((pinState & (1 << PIND5)) == 0) 
     {
-      buttonNumber = 5;
+      buttonNumber = 4;
     }
     else if ((pinState & (1 << PIND6)) == 0)
     {
-      buttonNumber = 6;
-    }
+      buttonNumber = 5;
     }
     merkattuaika = aika;
   }
+    
+}
 
 /* toistuva DigitalRead ifien alla on hitaampi tapa käydä funktiossa katsomassa pinnien aktiivisuutta
   joten siirsin haettavat luvut variaabeleihin suoraan. PIND on D-portin rekisteri, joka muuttuu 
