@@ -89,7 +89,7 @@ void initializeTimer(void) {
   OCR1A = 15624;// = (16*10^6) / (1*1024) - 1 (must be <65536)
   TCCR1B |= (1 << WGM12);  // CTC mode
   TCCR1B |= (1 << CS12) | (1 << CS10);  // 1024 prescaler
-sei();
+  sei();
 	// void initializeTimer(void) 
 }
 
@@ -131,8 +131,10 @@ void checkGame(byte nbrOfButtonPush, int randomNumbers[], int userNumbers[]) { /
   Parameters
   byte lastButtonPress of the player 0 or 1 or 2 or 3
   */
-    for (int i = 0; i < 10; i++){ //poista
+    for (int i = 0; i < 30; i++){ //poista
+    Serial.println("randomNumbers");
       Serial.println(randomNumbers[i]); //poista
+       Serial.println("userNumbers");
       Serial.println(userNumbers[i]); // poista
       //Serial.println(nbrOfButtonPush[i]); //poista
     } //poista
@@ -175,8 +177,13 @@ void initializeGame() {
    for (int i = 0; i < 100; i++) { // Nollataan taulukot
     randomNumbers[i] = 0;
     userNumbers[i] = 0;
+    
   }
+  score = 0;
+  showResult(0);
   nbrOfButtonPush = 0; // Nollataan nappejen painallukset
+  initializeTimer();
+  //score = 0;
 }
  
 
