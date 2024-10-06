@@ -12,6 +12,22 @@ void playGameStartSound(void);
 
 
 
+void playButtonOneSelected(void);
+
+
+
+void playButtonTwoSelected(void);
+
+
+
+void playButtonThreeSelected(void);
+
+
+
+void playButtonFourSelected(void);
+
+
+
 void playGameEndSound(void);
 
 

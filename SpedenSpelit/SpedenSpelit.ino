@@ -57,6 +57,18 @@ void loop() {
 
   if(newTimerInterrupt && gameStarted) {  // Jos on aika luoda uusi numero ja peli on käynnissä 
     ledNumber = globalRandomNumber; // asettaa ledin numeron timerin mukaan
+    if (ledNumber == 1){
+      playButtonOneSelected();
+    }
+    else if (ledNumber == 2){
+      playButtonTwoSelected();
+    }
+    else if (ledNumber == 3){
+      playButtonThreeSelected();
+    }
+    else if (ledNumber == 4){
+      playButtonFourSelected();
+    }
     Serial.print("ledNumber : ");      //POISTA
     Serial.println(ledNumber);           //POISTA
     //Serial.println(globalRandomNumber); //POISTA
@@ -132,18 +144,21 @@ void checkGame(byte nbrOfButtonPush, int randomNumbers[], int userNumbers[]) { /
   Parameters
   byte lastButtonPress of the player 0 or 1 or 2 or 3
   */
-    for (int i = 0; i < 30; i++){ //poista
+    /*for (int i = 0; i < 30; i++){ //poista
     Serial.println("randomNumbers");
       Serial.println(randomNumbers[i]); //poista
        Serial.println("userNumbers");
       Serial.println(userNumbers[i]); // poista
       //Serial.println(nbrOfButtonPush[i]); //poista
-    } //poista
+    */
+   //poista
 
   if (compareArrays(randomNumbers, userNumbers, nbrOfButtonPush) == -1) { // jos vertailu ei mene läpi, kutsu stopTheGame()-funktiota
 
     
     stopTheGame(); // Stop the game if the input is wrong
+
+    
   }
 }
 
@@ -156,6 +171,9 @@ int compareArrays(int randomNumbers[], int userNumbers[], int nbrOfButtonPush)
         if (randomNumbers[i] != userNumbers[i])
         {
             // Tämä funktio kutsutaan, kun input on väärä.
+                Serial.println(randomNumbers[i]);
+                Serial.println(userNumbers[i]);
+                Serial.println(nbrOfButtonPush);
             return -1;  // Palauta -1, jos virhe löydetään.
         }
     }
@@ -192,6 +210,7 @@ void initializeGame() {
 void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota ja enabloi Timer1 keskeytykset käynnistääkseen pelin
   // tulosta serial monitoriin, kun funktio alkaa
   TIMSK1 &= ~(1 << OCIE1A); // Disabloi Timer1 keskeytys (jos sattumalta vielä päällä)
+  TIMSK1 = 0;
 
   playGameStartSound();
   Serial.println("startTheGame function starting!");
