@@ -46,12 +46,11 @@ void loop() {
      }
      else if (gameStarted && buttonNumber >= 1 && buttonNumber <= 4) { // if the game is started and the buttonNumber is between 2 and 5 (game buttons)
       userNumbers[nbrOfButtonPush] = buttonNumber; // Tallentaa käyttäjän painaman numeron taulukkoon
-      
-      nbrOfButtonPush++;
-      // checkGame(nbrOfButtonPush); // kutsutaan checkGame funktiota
+      nbrOfButtonPush++; // Kasvattaa painallusten määrää
+      // checkGame(nbrOfButtonPush); // kutsutaan checkGame funktiota (ei tarvi?)
       timeToCheckGame = true; // kutsutaan checkGame funktiota myöhemmin
      }
-     buttonNumber = -1; // Resetoi buttonNumber että ei pyöri loputtomasti 
+     buttonNumber = -1; // Resetoi buttonNumber jotta seuraava painallus otetaan oikein 
   Serial.print("globalRandomNumber : "); // POISTA
   Serial.println(globalRandomNumber); //POISTA
   }
@@ -63,7 +62,9 @@ void loop() {
     //Serial.println(globalRandomNumber); //POISTA
     //Serial.println(buttonNumber);       //POISTA
     setLed(ledNumber); // asettaa ledin
-    randomNumbers[nbrOfButtonPush] = globalRandomNumber; // tallentaa numeron taulukkoon
+    if (nbrOfButtonPush < 100) { // Varmistetaan, ettei taulukko ylity ja peli kaadu
+      randomNumbers[nbrOfButtonPush] = globalRandomNumber; // tallentaa numeron taulukkoon
+    }
     newTimerInterrupt = false; // resetoi interruptin
     // new random number must be generated
     // int myRand = random(1,5);
