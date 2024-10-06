@@ -180,25 +180,27 @@ void initializeGame() {
     userNumbers[i] = 0;
     
   }
-  score = 0;
-  showResult(0);
+  score = 0; // Nollataan pisteet
+  globalRandomNumber = 0; // Nollataan globatRandomNuber
+  showResult(0); // Nollataan pisteet-display
   nbrOfButtonPush = 0; // Nollataan nappejen painallukset
-  initializeTimer();
-  //score = 0;
+  initializeTimer(); // Asettaa ajastimen uudelleen
 }
  
 
 
 void startTheGame() { // void startTheGame() kutsuu initializeGame() funktiota ja enabloi Timer1 keskeytykset käynnistääkseen pelin
   // tulosta serial monitoriin, kun funktio alkaa
+  TIMSK1 &= ~(1 << OCIE1A); // Disabloi Timer1 keskeytys (jos sattumalta vielä päällä)
+
   playGameStartSound();
   Serial.println("startTheGame function starting!");
+
+  // Kutsutaan initializeGame()-funktiota
+  initializeGame();
   
   // enabloi Timer1 compare keskeytykset
   TIMSK1 |= (1 << OCIE1A); 
-
-  // Kutsutaan initializeGame()-funktiota
-   initializeGame();
 }
 
 void stopTheGame() {
