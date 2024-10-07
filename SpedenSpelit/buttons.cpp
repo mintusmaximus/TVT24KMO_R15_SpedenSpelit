@@ -1,5 +1,6 @@
 #include "buttons.h" //lisätään headeri, jossa definet buttonsiin liittyen
 unsigned long merkattuaika = 0; //aikakytkin, myöhemmin esillä
+extern byte nbrOfButtonPush;
 
 void initButtonsAndButtonInterrupts(void)
 {
@@ -13,6 +14,7 @@ void initButtonsAndButtonInterrupts(void)
 
 ISR(PCINT2_vect) //funktio pineille D0-D7, jossa on aikaraja painalluksille
 {
+  
   const unsigned long kynnysaika = 140; //debounssille kynnysaika jolloin painallusta ei lueta
   unsigned long aika = millis(); //varastoi Arduinon laskema aika, uns.long pakollinen(manuaali)
 
@@ -22,26 +24,29 @@ ISR(PCINT2_vect) //funktio pineille D0-D7, jossa on aikaraja painalluksille
     if ((pinState & (1 << PIND2)) == 0) 
     {
       buttonNumber = 1; //TARKISTA NÄÄ INOSTA KU VALMIS
+      nbrOfButtonPush++;
     }
     else if ((pinState & (1 << PIND3)) == 0) 
     {
       buttonNumber = 2;
+      nbrOfButtonPush++;
     }
     else if ((pinState & (1 << PIND4)) == 0) 
     {
       buttonNumber = 3;
+      nbrOfButtonPush++;
     }
     else if ((pinState & (1 << PIND5)) == 0) 
     {
       buttonNumber = 4;
+      nbrOfButtonPush++;
     }
     else if ((pinState & (1 << PIND6)) == 0)
     {
       buttonNumber = 5;
     }
     merkattuaika = aika;
-  }
-    
+  } 
 }
 
 /* toistuva DigitalRead ifien alla on hitaampi tapa käydä funktiossa katsomassa pinnien aktiivisuutta

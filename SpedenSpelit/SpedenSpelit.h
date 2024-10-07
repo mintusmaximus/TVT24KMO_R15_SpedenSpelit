@@ -41,5 +41,6 @@ void startTheGame(void);
 
 
 void stopTheGame(void);
+void incrementDisplay(void);
 
 #endif
