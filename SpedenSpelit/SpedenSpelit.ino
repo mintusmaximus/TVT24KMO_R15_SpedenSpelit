@@ -13,6 +13,7 @@ int score = 0;
 extern byte ledNumber = 0;
 int testeri = 0;
 int countteri = 0;
+volatile int totalInterrupts = 0;
 
 // Arvotut numerot talletetaan 100 alkion mittaiseen taulukkoon (randomNumbers)
 int randomNumbers[100];
@@ -116,12 +117,17 @@ Increase timer interrupt rate after 10 interrupts.
 ISR(TIMER1_COMPA_vect) {
   static int interruptCount = 0;  // Static variable to count interrupts
   interruptCount++;               // Increment the interrupt count
+  totalInterrupts++;              // keep track of total timer runs
 
   if (interruptCount >= 10) {  // Increase the timer interrupt rate
     OCR1A = OCR1A / 1.1;       // Change the compare match value to increase the interrupt rate
     interruptCount = 0;        // Reset the interrupt count
   }
 
+  if (totalInterrupts > 110){ // stop the game at 110 leds so the arduino doesnt implode
+    stopTheGame();
+  }
+  
   // Communicate to loop() that a new random number is ready
   globalRandomNumber = random(1, 5);  // Generate a new random number
   newRandomNumberReady = true;        // set a flag
