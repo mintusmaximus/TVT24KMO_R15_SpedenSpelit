@@ -152,7 +152,7 @@ void initializeGame() {
   nbrOfButtonPush = 0;     // Nollataan nappejen painallukset
   initializeTimer();       // Asettaa ajastimen uudelleen
   
-  globalRandomNumber = random(1, 5); // luo väkisin ensimmäinen numero timerin ulkopuolella, koska timeri ei tee ekaa numeroa
+  globalRandomNumber = random(1, 5); // luo väkisin ensimmäinen numeron timerin ulkopuolella, koska timeri ei tee ekaa numeroa
   newRandomNumberReady = true; // asettaa flagin uudelle numerolle valmiiksi 
   newTimerInterrupt = true; // asettaa timerin keskeytyksen valmiiksi 
 }
