@@ -151,6 +151,10 @@ void initializeGame() {
   showResult(0);           // Nollataan pisteet-display
   nbrOfButtonPush = 0;     // Nollataan nappejen painallukset
   initializeTimer();       // Asettaa ajastimen uudelleen
+  
+  globalRandomNumber = random(1, 5);
+  newRandomNumberReady = true;
+  newTimerInterrupt = true;
 }
 
 void startTheGame() {  // void startTheGame() kutsuu initializeGame() funktiota ja enabloi Timer1 keskeytykset käynnistääkseen pelin
