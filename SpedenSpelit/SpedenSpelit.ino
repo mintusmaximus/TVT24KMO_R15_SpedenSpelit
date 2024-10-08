@@ -44,7 +44,12 @@ void loop() {
     } else if (buttonNumber == 6) {  // stop the game if buttonNumber == 6 (reset button)
       stopTheGame();
     } else if (gameStarted && buttonNumber >= 1 && buttonNumber <= 4) {  // if the game is started and the buttonNumber is between 2 and 5 (game buttons)
-      userNumbers[nbrOfButtonPush] = buttonNumber;                       // Tallentaa käyttäjän painaman numeron taulukkoon
+      userNumbers[nbrOfButtonPush] = buttonNumber;
+      Serial.print(nbrOfButtonPush);
+      Serial.print(" usr-> ");
+      Serial.println(userNumbers[nbrOfButtonPush]);
+      nbrOfButtonPush++;
+                                                        // Tallentaa käyttäjän painaman numeron taulukkoon
                                                        // Kasvattaa painallusten määrää
       
       timeToCheckGame = true;  // kutsutaan checkGame funktiota myöhemmin
@@ -66,6 +71,11 @@ void loop() {
     setLed(ledNumber);                                      // asettaa ledin
     if (nbrOfButtonPush < 100) {                            // Varmistetaan, ettei taulukko ylity ja peli kaadu
       randomNumbers[countteri] = globalRandomNumber;
+      Serial.print(countteri);
+      Serial.print(" rnd-> ");
+      Serial.println(randomNumbers[countteri]);
+      //Serial.println("toimii tämä"); //POISTA
+      //Serial.println(randomNumbers[nbrOfButtonPush]);
       //Serial.println(randomNumbers[countteri]);  //laittaa oikeita numeroita POISTA
       countteri++;
        
@@ -119,17 +129,28 @@ ISR(TIMER1_COMPA_vect) {
 }
 
 
-int checkGame(int randomNumbers[], int userNumbers[], int nbrOfButtonPush ) {
-    Serial.println(randomNumbers[nbrOfButtonPush -1]);
-    Serial.println(userNumbers[nbrOfButtonPush]);
-    Serial.println(nbrOfButtonPush);
-    if (randomNumbers[nbrOfButtonPush -1] != userNumbers[nbrOfButtonPush]) {
-      return 0;  // Palauta 0, jos virhe löydetään.
+int checkGame(int* randomNumbers, int* userNumbers, int nbrOfButtonPush ) {
+    //Serial.println(randomNumbers[nbrOfButtonPush -1]);
+    //Serial.println(randomNumbers[nbrOfButtonPush -1]);
+    //Serial.println(randomNumbers[nbrOfButtonPush +1]);
+    //Serial.println(userNumbers[nbrOfButtonPush]);
+    //Serial.println(nbrOfButtonPush);
+    for (int i=0; i<nbrOfButtonPush; i++){
+      if (randomNumbers[i] != userNumbers[i]) {
+        Serial.println(randomNumbers[i]);
+        Serial.println(randomNumbers[i -1]);
+        Serial.println("-----");
+        Serial.println(userNumbers[i]);
+        Serial.println(userNumbers[i -1]);
+
+        Serial.println("----");
+        return 0;  // Palauta 0, jos virhe löydetään.
+      }
     }
-    else{
-      return 1;
+    return 1;
+    
   }
-}
+
 
 void incrementDisplay() {
   score++;            // Increment the score
@@ -181,4 +202,6 @@ void stopTheGame() {
   gameStarted = false;  // Pelin tila ei-aloitetuksi
   ledEndGame();
   playGameEndSound();
+  countteri = 0;
+  nbrOfButtonPush = 0;
 }

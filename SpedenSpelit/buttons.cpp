@@ -24,22 +24,22 @@ ISR(PCINT2_vect) //funktio pineille D0-D7, jossa on aikaraja painalluksille
     if ((pinState & (1 << PIND2)) == 0) 
     {
       buttonNumber = 1; //TARKISTA NÄÄ INOSTA KU VALMIS
-      nbrOfButtonPush++;
+      //nbrOfButtonPush++;
     }
     else if ((pinState & (1 << PIND3)) == 0) 
     {
       buttonNumber = 2;
-      nbrOfButtonPush++;
+      //nbrOfButtonPush++;
     }
     else if ((pinState & (1 << PIND4)) == 0) 
     {
       buttonNumber = 3;
-      nbrOfButtonPush++;
+      //nbrOfButtonPush++;
     }
     else if ((pinState & (1 << PIND5)) == 0) 
     {
       buttonNumber = 4;
-      nbrOfButtonPush++;
+      //nbrOfButtonPush++;
     }
     else if ((pinState & (1 << PIND6)) == 0)
     {
