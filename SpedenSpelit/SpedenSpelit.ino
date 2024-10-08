@@ -152,9 +152,9 @@ void initializeGame() {
   nbrOfButtonPush = 0;     // Nollataan nappejen painallukset
   initializeTimer();       // Asettaa ajastimen uudelleen
   
-  globalRandomNumber = random(1, 5);
-  newRandomNumberReady = true;
-  newTimerInterrupt = true;
+  globalRandomNumber = random(1, 5); // luo väkisin ensimmäinen numero timerin ulkopuolella, koska timeri ei tee ekaa numeroa
+  newRandomNumberReady = true; // asettaa flagin uudelle numerolle valmiiksi 
+  newTimerInterrupt = true; // asettaa timerin keskeytyksen valmiiksi 
 }
 
 void startTheGame() {  // void startTheGame() kutsuu initializeGame() funktiota ja enabloi Timer1 keskeytykset käynnistääkseen pelin
