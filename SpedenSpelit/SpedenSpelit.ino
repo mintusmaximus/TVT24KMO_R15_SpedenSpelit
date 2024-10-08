@@ -125,6 +125,7 @@ ISR(TIMER1_COMPA_vect) {
   }
 
   if (totalInterrupts > 110){ // stop the game at 110 leds so the arduino doesnt implode
+    totalInterrupts = 0; // reset the counter so the game still works 
     stopTheGame();
   }
   
