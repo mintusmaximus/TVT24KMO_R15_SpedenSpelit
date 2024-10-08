@@ -14,6 +14,7 @@ extern byte ledNumber = 0;
 int testeri = 0;
 int countteri = 0;
 volatile int totalInterrupts = 0;
+volatile int interruptCount = 0;  
 
 // Arvotut numerot talletetaan 100 alkion mittaiseen taulukkoon (randomNumbers)
 int randomNumbers[100];
@@ -42,7 +43,7 @@ void loop() {
     if (buttonNumber == 5 && !gameStarted) {  // start the game if buttonNumber == 5 (näppäin 4) ja jos peliä ei ole jo aloitettu
       startTheGame();
       gameStarted = true;            // Merkitään peli käynnistyneeksi
-    } else if (buttonNumber == 6) {  // stop the game if buttonNumber == 6 (reset button)
+    } else if (buttonNumber == 5) {  // stop the game if buttonNumber == 5 (reset button)
       stopTheGame();
     } else if (gameStarted && buttonNumber >= 1 && buttonNumber <= 4) {  // if the game is started and the buttonNumber is between 2 and 5 (game buttons)
       userNumbers[nbrOfButtonPush] = buttonNumber;
@@ -115,7 +116,6 @@ Communicate to loop() that it's time to make new random number.
 Increase timer interrupt rate after 10 interrupts.
 */
 ISR(TIMER1_COMPA_vect) {
-  static int interruptCount = 0;  // Static variable to count interrupts
   interruptCount++;               // Increment the interrupt count
   totalInterrupts++;              // keep track of total timer runs
 
@@ -179,6 +179,8 @@ void initializeGame() {
   showResult(0);           // Nollataan pisteet-display
   nbrOfButtonPush = 0;     // Nollataan nappejen painallukset
   initializeTimer();       // Asettaa ajastimen uudelleen
+  interruptCount = 0;      // timerin interruptien määrä nollaksi että nopeuden kasvu ei jatku aiemmasta pelistä
+  totalInterrupts = 0;
   
   globalRandomNumber = random(1, 5); // luo väkisin ensimmäinen numeron timerin ulkopuolella, koska timeri ei tee ekaa numeroa
   newRandomNumberReady = true; // asettaa flagin uudelle numerolle valmiiksi 
