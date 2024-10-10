@@ -52,4 +52,6 @@ void show1(void);
 */
 void show2(int);
 
+void ledEndGame(void);
+
 #endif  

@@ -2,11 +2,11 @@
 
 const byte ledPins[] = {A2, A3, A4, A5}; //Analogi pinnien alustukseen
 const int ledCount = 4; // käytössä 4 lediä
-// testi yritys
+const int ledFlashDuration = 350; // ledin välähdysaika
+
 void initializeLeds()
 {
-
-for (byte i = 0; i < 4; i++){
+  for (byte i = 0; i < 4; i++){
     pinMode(ledPins[i], OUTPUT); //Analogi pinnien alustus
     digitalWrite(ledPins[i], LOW); //Ledit pois päältä
 }
@@ -14,28 +14,29 @@ for (byte i = 0; i < 4; i++){
 
 void setLed(byte ledNumber)
 {
-if (ledNumber < 4) {
+  if (ledNumber < 5) {
     for (byte i = 0; i < 4; i++){
         digitalWrite(ledPins[i], LOW);
     }
 }
-
-digitalWrite (ledPins[ledNumber], HIGH);
+  digitalWrite (ledPins[(ledNumber -1)], HIGH);
+  delay(ledFlashDuration);
+  digitalWrite (ledPins[(ledNumber -1)], LOW);
 }
 
 
 void clearAllLeds()
 {
-for(int i = 0; i < ledCount; i++){
-  digitalWrite(ledPins[i], LOW);
+  for(int i = 0; i < ledCount; i++){
+    digitalWrite(ledPins[i], LOW);
 }
  
 }
 
 void setAllLeds()
 {
-for(int i = 0; i < ledCount; i++){
-  digitalWrite(ledPins[i], HIGH);
+  for(int i = 0; i < ledCount; i++){
+    digitalWrite(ledPins[i], HIGH);
 }
  
 }
@@ -59,11 +60,11 @@ void show1()
 
 void show2(int rounds)
 {
-int maxNopeus = 100;
- int minNopeus = 800;
- int nopeudenMuutos = 50;
+  int maxNopeus = 100;
+  int minNopeus = 800;
+  int nopeudenMuutos = 50;
 
- int nopeus = minNopeus;
+  int nopeus = minNopeus;
 
  for(int k = -1; k < rounds; k++){
   for(int i = -1; i < 4; i++){
@@ -80,4 +81,13 @@ int maxNopeus = 100;
   }
  }
 }
+}
+
+void ledEndGame()
+{
+  setAllLeds();
+  delay(500);
+  clearAllLeds();
+  delay(500);
+
 }

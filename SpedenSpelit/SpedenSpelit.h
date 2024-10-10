@@ -38,8 +38,7 @@ void checkGame(byte);
   the Game.
 */
 void startTheGame(void);
-
-
 void stopTheGame(void);
+void incrementDisplay(void);
 
 #endif
