@@ -13,9 +13,12 @@ extern byte ledNumber = 0;
 int testeri = 0;
 int countteri = 0;
 
-int randomNumbers[100]; // Taulukko pelin arpomille numeroille
-int userNumbers[100]; // Taulukko käyttäjän painalluksille
-extern byte nbrOfButtonPush = 0;
+// Arvotut numerot talletetaan 100 alkion mittaiseen taulukkoon (randomNumbers)
+int randomNumbers[100];
+// Kun käyttäjä painaa kytkimiä 0,1,2,3 nämä näppäinten painallukset talletetaan taulukkoon (userNumbers)
+int userNumbers[100];
+// Indeksi, joka seuraa missä kohtaa taulukkoa mennään eli monestikko käyttäjä on painanut nappeja
+extern byte nbrOfButtonPush = 0;  //byte-tyyppi, koska arvo ei ylitä 255 ja käyttää vähemmän muistia. oli käytetty muualla koodissa myös.
 
 bool newRandomNumberReady = false;  // Flag to indicate that a new random number is ready to be used
 int globalRandomNumber = 0;         // Global variable to store the random number
@@ -35,11 +38,18 @@ void loop() {
     if (buttonNumber == 5 && !gameStarted) {  // Aloita peli jos buttonNumber == 5 ja jos peliä ei ole jo aloitettu
       startTheGame();
       gameStarted = true;            // Merkitään peli käynnistyneeksi
-    } else if (buttonNumber == 6) {  // Pysäytä peli jos buttonNumber == 6 (reset button)
+    } else if (buttonNumber == 5) {  // stop the game if buttonNumber == 5 (reset button)
       stopTheGame();
-    } else if (gameStarted && buttonNumber >= 1 && buttonNumber <= 4) {  // Jos peli on aloitettu ja buttonNumber on 2 and 5 välillä (game buttons)
-      userNumbers[nbrOfButtonPush] = buttonNumber;                       // Tallentaa käyttäjän painaman numeron taulukkoon
-      timeToCheckGame = true;  // Kutsutaan checkGame funktiota
+    } else if (gameStarted && buttonNumber >= 1 && buttonNumber <= 4) {  // if the game is started and the buttonNumber is between 2 and 5 (game buttons)
+      userNumbers[nbrOfButtonPush] = buttonNumber;
+      Serial.print(nbrOfButtonPush);
+      Serial.print(" usr-> ");
+      Serial.println(userNumbers[nbrOfButtonPush]);
+      nbrOfButtonPush++;
+                                                        // Tallentaa käyttäjän painaman numeron taulukkoon
+                                                       // Kasvattaa painallusten määrää
+      
+      timeToCheckGame = true;  // kutsutaan checkGame funktiota myöhemmin
     }
     buttonNumber = -1;  // Resetoi buttonNumber jotta seuraava painallus otetaan oikein
   }
@@ -58,6 +68,12 @@ void loop() {
     setLed(ledNumber); // Asettaa ledin
     if (nbrOfButtonPush < 100) { // Varmistetaan, ettei taulukko ylity ja peli kaadu
       randomNumbers[countteri] = globalRandomNumber;
+      Serial.print(countteri);
+      Serial.print(" rnd-> ");
+      Serial.println(randomNumbers[countteri]);
+      //Serial.println("toimii tämä"); //POISTA
+      //Serial.println(randomNumbers[nbrOfButtonPush]);
+      //Serial.println(randomNumbers[countteri]);  //laittaa oikeita numeroita POISTA
       countteri++;
        
     }
@@ -93,14 +109,19 @@ void initializeTimer(void) {
 Communicate to loop() that it's time to make new random number.
 Increase timer interrupt rate after 10 interrupts. */
 ISR(TIMER1_COMPA_vect) {
-  static int interruptCount = 0;  // Static variable to count interrupts
   interruptCount++;               // Increment the interrupt count
+  totalInterrupts++;              // keep track of total timer runs
 
   if (interruptCount >= 10) {  // Increase the timer interrupt rate
     OCR1A = OCR1A / 1.1;       // Change the compare match value to increase the interrupt rate
     interruptCount = 0;        // Reset the interrupt count
   }
 
+  if (totalInterrupts > 110){ // stop the game at 110 leds so the arduino doesnt implode
+    totalInterrupts = 0; // reset the counter so the game still works 
+    stopTheGame();
+  }
+  
   // Communicate to loop() that a new random number is ready
   globalRandomNumber = random(1, 5);  // Generate a new random number
   newRandomNumberReady = true;        // set a flag
@@ -108,20 +129,28 @@ ISR(TIMER1_COMPA_vect) {
 }
 
 
-/* checkGame() subroutine is used to check the status of the Game after each player button press.
-If the latest player button press is wrong, the game stops and if the latest press was right,
-game display is incremented by 1 (in the incrementDisplay() subroutine). */
-int checkGame(int randomNumbers[], int userNumbers[], int nbrOfButtonPush ) { 
-    Serial.println(randomNumbers[nbrOfButtonPush -1]);
-    Serial.println(userNumbers[nbrOfButtonPush]);
-    Serial.println(nbrOfButtonPush);
-    if (randomNumbers[nbrOfButtonPush -1] != userNumbers[nbrOfButtonPush]) {
-      return 0;  // Palauta 0, jos virhe löydetään.
+int checkGame(int* randomNumbers, int* userNumbers, int nbrOfButtonPush ) {
+    //Serial.println(randomNumbers[nbrOfButtonPush -1]);
+    //Serial.println(randomNumbers[nbrOfButtonPush -1]);
+    //Serial.println(randomNumbers[nbrOfButtonPush +1]);
+    //Serial.println(userNumbers[nbrOfButtonPush]);
+    //Serial.println(nbrOfButtonPush);
+    for (int i=0; i<nbrOfButtonPush; i++){
+      if (randomNumbers[i] != userNumbers[i]) {
+        Serial.println(randomNumbers[i]);
+        Serial.println(randomNumbers[i -1]);
+        Serial.println("-----");
+        Serial.println(userNumbers[i]);
+        Serial.println(userNumbers[i -1]);
+
+        Serial.println("----");
+        return 0;  // Palauta 0, jos virhe löydetään.
+      }
     }
-    else {
-      return 1; // Muuten palauta 1.
+    return 1;
+    
   }
-}
+
 
 void incrementDisplay() {
   score++;            // Increment the score
@@ -143,9 +172,9 @@ void initializeGame() {
   nbrOfButtonPush = 0;     // Nollataan nappejen painallukset
   initializeTimer();       // Asettaa ajastimen uudelleen
   
-  globalRandomNumber = random(1, 5);
-  newRandomNumberReady = true;
-  newTimerInterrupt = true;
+  globalRandomNumber = random(1, 5); // luo väkisin ensimmäinen numeron timerin ulkopuolella, koska timeri ei tee ekaa numeroa
+  newRandomNumberReady = true; // asettaa flagin uudelle numerolle valmiiksi 
+  newTimerInterrupt = true; // asettaa timerin keskeytyksen valmiiksi 
 }
 
 
@@ -164,4 +193,6 @@ void stopTheGame() {
   gameStarted = false;  // Pelin tila ei-aloitetuksi
   ledEndGame(); // Ledishow pelin päättymisen merkiksi
   playGameEndSound(); // Pelinlopetusääni
+  countteri = 0;
+  nbrOfButtonPush = 0;
 }
