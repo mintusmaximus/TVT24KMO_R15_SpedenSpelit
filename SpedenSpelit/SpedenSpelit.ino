@@ -115,6 +115,7 @@ ISR(TIMER1_COMPA_vect) {
 
   if (interruptCount >= 10) {  // Increase the timer interrupt rate
     OCR1A = OCR1A / 1.1;       // Change the compare match value to increase the interrupt rate
+    ledFlashDuration = ledFlashDuration / 1.1; // Change the led flash duration to increase the led flash rate 
     interruptCount = 0;        // Reset the interrupt count
   }
 
@@ -171,6 +172,7 @@ void initializeGame() {
   nbrOfButtonPush = 0;     // Nollataan nappejen painallukset
   initializeTimer();       // Asettaa ajastimen uudelleen
   interruptCount = 0;      // Nollaa timerin interruptit
+  ledFlashDuration = 200;  // Asettaa ledin välähdysajan 
   totalInterrupts = 0;
   
   globalRandomNumber = random(1, 5);  // Luo väkisin ensimmäinen numeron timerin ulkopuolella, koska timeri ei tee ekaa numeroa

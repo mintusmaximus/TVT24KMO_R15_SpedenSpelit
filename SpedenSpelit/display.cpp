@@ -150,6 +150,9 @@ void showResult(byte number)
 {
   Serial.print("DISPLAY: Displaying number: "); // debug message
   Serial.println(number); // debug message
+
+  // HUOM! Jos luvut näkyy väärinpäin näytöissä, muuta jakolasku ja jakojäännös päinvastoin tässä
+  
   uint8_t tens = number / 10; // get tens by dividing number by 10 (ex. 23 / 10 = 2)
   uint8_t ones = number % 10; // get ones by getting the remainder of number divided by 10 (ex. 23 % 10 = 3), makes 23 with above line of code
 

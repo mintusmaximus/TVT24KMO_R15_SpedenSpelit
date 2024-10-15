@@ -2,7 +2,7 @@
 
 const byte ledPins[] = {A2, A3, A4, A5}; //Analogi pinnien alustukseen
 const int ledCount = 4; // käytössä 4 lediä
-const int ledFlashDuration = 350; // ledin välähdysaika
+volatile int ledFlashDuration = 200; // ledin välähdysaika
 
 void initializeLeds()
 {
